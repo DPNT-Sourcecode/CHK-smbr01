@@ -42,8 +42,8 @@ def _calculate_total_price(products_in_basket_sku_list):
         number_of_each_item[sku] += 1
 
     # check special offers
-    number_of_5a_discounts = int(number_of_each_item['A'] / 5)
-    number_of_3a_discounts = int(number_of_each_item['A'] / 3)
+    number_of_5a_discounts, a_remainder = divmod(number_of_each_item['A'], 5)
+    number_of_3a_discounts = int(a_remainder / 3)
     potential_number_of_free_b_products = int(number_of_each_item['E'] / 2)
 
     temp_b_count = number_of_each_item['B']
@@ -79,3 +79,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
