@@ -29,10 +29,7 @@ PRICE_LIST = {
 def checkout(skus: str) -> int:
     # assuming SKUs are comma seperated, won't know until run
     products_in_basket_sku_list = skus.split(",")
-    return sum([PRICE_LIST[x] for x in products_in_basket_sku_list])
 
-
-
-
-
-
+    # TODO handle illegal input
+    # TODO handle special offers
+    return sum([PRICE_LIST[sku] for sku in products_in_basket_sku_list])
