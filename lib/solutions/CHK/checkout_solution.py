@@ -23,7 +23,8 @@ PRICE_LIST = {
     'A': 50,
     'B': 30,
     'C': 20,
-    'D': 15
+    'D': 15,
+    'E': 40
 }
 
 
@@ -42,6 +43,8 @@ def _calculate_total_price(products_in_basket_sku_list):
     # check special offers
     number_of_a_discounts = int(number_of_each_item['A'] / 3)
     number_of_b_discounts = int(number_of_each_item['B'] / 2)
+
+    number_of_potential_3e_discounts_for_b = int(number_of_each_item['E'] / 2)
 
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
@@ -72,6 +75,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
