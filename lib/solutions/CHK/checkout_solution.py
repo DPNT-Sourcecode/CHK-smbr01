@@ -148,8 +148,10 @@ def _calculate_total_price(products_in_basket_sku_list):
 
     # number_of_f_free = int(number_of_each_item['F'] / 3)
 
-    for index, row in df.iterrows():
-        print(row['name'], row['age'])
+    # manage discounts
+    for index, row in price_df.iterrows():
+        discount_parser(row["price"], row["discount_rule"])
+
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
 
@@ -176,3 +178,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
