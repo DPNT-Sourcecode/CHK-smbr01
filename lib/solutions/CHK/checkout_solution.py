@@ -32,6 +32,10 @@ def _is_basket_valid(products_in_basket_sku_list):
             return False
     return True
 
+def  _calculate_total_price():
+    
+    return 0
+
 def checkout(skus: str) -> int:
     if "," in skus:
         # assuming SKUs are comma seperated, won't know until run
@@ -49,6 +53,7 @@ def checkout(skus: str) -> int:
         return sum([PRICE_LIST[sku] for sku in products_in_basket_sku_list])
     else:
         return -1
+
 
 
 

@@ -26,8 +26,9 @@ class TestChk():
         assert total_price == expected_total_price
 
     def test_checkout_invalid_basket(self):
-        expected_total_price = 115
-        total_price = checkout_solution.checkout("A,B,@%@£%,C,D")
-        assert total_price == expected_total_price
+        expected_response = -1
+        response = checkout_solution.checkout("A,B,@%@£%,C,D")
+        assert response == expected_response
+
 
 
