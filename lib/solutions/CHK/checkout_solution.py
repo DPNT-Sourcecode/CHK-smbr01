@@ -26,28 +26,31 @@ PRICE_LIST = {
     'D': 15
 }
 
+
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
         if sku not in PRICE_LIST:
             return False
     return True
 
-def  _calculate_total_price(products_in_basket_sku_list):
+
+def _calculate_total_price(products_in_basket_sku_list):
     number_of_each_item = {sku: 0 for sku in PRICE_LIST}
     for sku in products_in_basket_sku_list:
         number_of_each_item[sku] += 1
 
     # check special offers
     number_of_a_discounts = int(number_of_each_item['A'] / 3)
-    number_of_b_discounts = int(number_of_each_item['A'] / 2)
+    number_of_b_discounts = int(number_of_each_item['B'] / 2)
 
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
-    breakpoint()
+
     basket_total_post_discounts = basket_sub_total - \
         (number_of_a_discounts * 20) - (number_of_b_discounts * 15)
 
     return basket_total_post_discounts
+
 
 def checkout(skus: str) -> int:
     if "," in skus:
@@ -61,10 +64,10 @@ def checkout(skus: str) -> int:
     # countC = skus.count("C")
     # countD = skus.count("D")
 
-    # TODO handle special offers
     if basket_valid:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
