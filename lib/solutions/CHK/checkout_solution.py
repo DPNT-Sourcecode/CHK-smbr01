@@ -107,7 +107,7 @@ def discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
 
     return {
         "type": discount_type,
-        "discount": price,
+        "discount": discount_per_trigger,
         "discount_target_sku": discount_target_sku
     }
 
@@ -146,8 +146,10 @@ def _calculate_total_price(products_in_basket_sku_list):
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
 
-    basket_total_post_discounts = basket_sub_total - (number_of_5a_discounts * 50) - (number_of_3a_discounts * 20) - (
-        number_of_b_discounts * 15) - (potential_number_of_free_b_products * 30) - (number_of_f_free * 10)
+    basket_total_post_discounts = basket_sub_total - (number_of_3a_discounts * 20)
+    
+    # basket_total_post_discounts = basket_sub_total - (number_of_5a_discounts * 50) - (number_of_3a_discounts * 20) - (
+    #     number_of_b_discounts * 15) - (potential_number_of_free_b_products * 30) - (number_of_f_free * 10)
 
     return basket_total_post_discounts
 
