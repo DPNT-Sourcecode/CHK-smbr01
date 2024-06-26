@@ -20,6 +20,11 @@ import pytest
 
 class TestChk():
 
+    def test_checkout_empty_basket(self):
+        expected_total_price = 0
+        total_price = checkout_solution.checkout("")
+        assert total_price == expected_total_price
+
     def test_checkout_simple_basket(self):
         expected_total_price = 115
         total_price = checkout_solution.checkout("ABCD")
@@ -44,6 +49,7 @@ class TestChk():
         expected_total_price = 75
         total_price = checkout_solution.checkout("BBB")
         assert total_price == expected_total_price
+
 
 
 
