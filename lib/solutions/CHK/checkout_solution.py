@@ -88,7 +88,10 @@ def _is_basket_valid(products_in_basket_sku_list):
 
 
 def rule_parser(discount_rule: str):
-    
+    discount_rules = discount_rule.split(",")
+    if len(discount_rules) == 2:
+        discount_rules[1] = discount_rules[1][1:]
+
 
 
 def same_product_multibuy_discount(number_for_free, price):
