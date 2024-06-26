@@ -158,14 +158,6 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
 
 
 
-
-# def same_product_multibuy_discount(number_of_items, price):
-#     # (number_of_5a_discounts * 50)
-#     # (number_of_3a_discounts * 20)
-#     return number_of_items * price
-
-
-
 def _calculate_total_price(products_in_basket_sku_list):
     basket_contents_lookup = {sku: 0 for sku in ITEM_PRICE_DISCOUNT_LOOKUP}
     for sku in products_in_basket_sku_list:
@@ -193,11 +185,12 @@ def _calculate_total_price(products_in_basket_sku_list):
 
     # manage discounts
     for index, row in price_df.iterrows():
-        discount_info = _discount_parser(row["price"], row["discount_rule"])
-        evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_info)
-        # update discount total, and amount of items left for discount
-        discount_accumulated += evaluated_discount_details['total_discount']
-        basket_contents_lookup[index] = evaluated_discount_details['remaining_items_for_future_discounts']
+        discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
+        for discount_rule in discount_rules_info:
+            evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_info)
+            # update discount total, and amount of items left for discount
+            discount_accumulated += evaluated_discount_details['total_discount']
+            basket_contents_lookup[index] = evaluated_discount_details['remaining_items_for_future_discounts']
 
     basket_total_post_discounts = basket_sub_total - discount_accumulated
 
@@ -222,6 +215,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
