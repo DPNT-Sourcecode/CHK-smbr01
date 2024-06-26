@@ -49,7 +49,7 @@ class TestChk():
         expected_total_price = 75
         total_price = checkout_solution.checkout("BBB")
         assert total_price == expected_total_price
-    
+
     def test_checkout_special_offer_3e_for_b(self):
         # the free Bs removed
         expected_total_price = 40+40+40+40
@@ -61,13 +61,14 @@ class TestChk():
         expected_total_price = 40+40+40+40+30
         total_price = checkout_solution.checkout("EEEEBBB")
         assert total_price == expected_total_price
-    
+
     def test_checkout_special_offer_3e_for_b_extra_2bs(self):
         # the free Bs removed
         expected_total_price = 40+40+40+40+45
         total_price = checkout_solution.checkout("EEEEBBBB")
         assert total_price == expected_total_price
 
-
-
-
+    def test_checkout_special_offer_5a_for_200(self):
+        expected_total_price = 200
+        total_price = checkout_solution.checkout("AAAAA")
+        assert total_price == expected_total_price
