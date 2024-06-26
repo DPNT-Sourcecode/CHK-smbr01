@@ -38,10 +38,12 @@ def  _calculate_total_price(products_in_basket_sku_list):
         number_of_each_item[sku] += 1
 
     # check special offers
-    breakpoint()
     number_of_a_discounts = int(number_of_each_item['A'] / 3)
+    number_of_b_discounts = int(number_of_each_item['A'] / 2)
 
-    return sum([PRICE_LIST[sku] for sku in products_in_basket_sku_list])
+    basket_sub_total = sum([PRICE_LIST[sku] for sku in products_in_basket_sku_list])
+    basket_total_post_discounts = basket_sub_total - (number_of_a_discounts * 20), 
+    return 
 
 def checkout(skus: str) -> int:
     if "," in skus:
@@ -60,3 +62,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
