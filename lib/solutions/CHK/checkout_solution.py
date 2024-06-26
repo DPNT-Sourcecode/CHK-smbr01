@@ -18,14 +18,19 @@
 # | D    | 15    |                |
 # +------+-------+----------------+
 
+# TODO convert to (data)class if requirements change
 PRICE_LIST = {
-    
+    'A': 50,
+    'B': 30,
+    'C': 20,
+    'D': 15
 }
 
 def checkout(skus: str) -> int:
     # assuming comma seperated
 
     raise NotImplementedError()
+
 
 
 
