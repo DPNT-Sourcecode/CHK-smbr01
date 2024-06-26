@@ -26,30 +26,28 @@ PRICE_LIST = {
     'D': 15
 }
 
-def _validate_basket(products_in_basket_sku_list):
+def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
         if sku not in PRICE_LIST:
-            return "invalid_basket"
-    return "valid_basket"
+            return False
+    return True
 
 def checkout(skus: str) -> int:
     if "," in skus:
         # assuming SKUs are comma seperated, won't know until run
         products_in_basket_sku_list = skus.split(",")
 
-    basket_valid = _validate_basket(products_in_basket_sku_list)
+    basket_valid = _is_basket_valid(products_in_basket_sku_list)
     # TODO fallback plan if not comma seperated
     # countA = skus.count("A")
     # countB = skus.count("B")
     # countC = skus.count("C")
     # countD = skus.count("D")
 
-    # TODO handle illegal input
     # TODO handle special offers
     if basket_valid:
         return sum([PRICE_LIST[sku] for sku in products_in_basket_sku_list])
     else:
-        
         return -1
 
 
