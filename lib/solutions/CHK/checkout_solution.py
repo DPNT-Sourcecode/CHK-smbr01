@@ -99,6 +99,8 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
     "Z": [50, ""],                      
 }
 
+PRICE_LIST = ITEM_PRICE_DISCOUNT_LOOKUP
+
 # set up dataframe for item price tabular data
 price_df = pd.DataFrame.from_dict(ITEM_PRICE_DISCOUNT_LOOKUP, orient='index')
 price_df.rename(columns={0: "price", 1: "discount_rule"})
@@ -177,8 +179,8 @@ def _calculate_total_price(products_in_basket_sku_list):
     # manage discounts
     for index, row in price_df.iterrows():
         discount_info = _discount_parser(row["price"], row["discount_rule"])
+        import pdb;pdb.set_trace()
         _per_row_discount_evaluator(number_of_each_item_lookup, index, row, discount_info)
-        breakpoint()
 
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
@@ -206,6 +208,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
