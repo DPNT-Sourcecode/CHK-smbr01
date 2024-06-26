@@ -26,7 +26,8 @@ PRICE_LIST = {
     'B': 30,
     'C': 20,
     'D': 15,
-    'E': 40
+    'E': 40,
+    'F': 10,
 }
 
 
@@ -55,6 +56,8 @@ def _calculate_total_price(products_in_basket_sku_list):
 
     number_of_b_discounts = int(temp_b_count / 2)
 
+    
+
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
 
@@ -79,6 +82,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 

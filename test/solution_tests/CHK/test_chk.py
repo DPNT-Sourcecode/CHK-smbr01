@@ -16,7 +16,10 @@ import pytest
 # | C    | 20    |                        |
 # | D    | 15    |                        |
 # | E    | 40    | 2E get one B free      |
+# | F    | 10    | 2F get one F free      |
 # +------+-------+------------------------+
+
+
 
 
 class TestChk():
@@ -82,4 +85,11 @@ class TestChk():
         expected_total_price = 300
         total_price = checkout_solution.checkout("AAAAAAA")
         assert total_price == expected_total_price
+
+    def test_checkout_special_offer_buy_2f_get_1_free(self):
+        expected_total_price = 20
+        total_price = checkout_solution.checkout("FFF")
+        assert total_price == expected_total_price
+
+
 
