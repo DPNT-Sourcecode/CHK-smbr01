@@ -144,9 +144,9 @@ def _per_row_discount_evaluator(basket_contents_lookup, index, row, discount_inf
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
-    import pdb;pdb.set_trace()
-    number_of_discounts_triggered, remainder = divmod(basket_contents_lookup['A'], 5)
+    number_of_discounts_triggered, remainder = divmod(basket_contents_lookup[index], discount_info['number_of_items_required_to_trigger'])
     # add it to the target row
+    # return remaining items
 
 
 
@@ -209,6 +209,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 

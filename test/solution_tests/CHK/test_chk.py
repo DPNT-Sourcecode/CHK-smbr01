@@ -64,10 +64,10 @@ class TestChk():
     #     response = checkout_solution.checkout("AB@%@£%CD")
     #     assert response == expected_response
 
-    def test_checkout_special_offer_a(self):
-        expected_total_price = 130
-        total_price = checkout_solution.checkout("AAA")
-        assert total_price == expected_total_price
+    # def test_checkout_special_offer_a(self):
+    #     expected_total_price = 130
+    #     total_price = checkout_solution.checkout("AAA")
+    #     assert total_price == expected_total_price
 
     # def test_checkout_special_offer_b(self):
     #     expected_total_price = 75
@@ -92,10 +92,10 @@ class TestChk():
     #     total_price = checkout_solution.checkout("EEEEBBBB")
     #     assert total_price == expected_total_price
 
-    # def test_checkout_special_offer_5a_for_200(self):
-    #     expected_total_price = 200
-    #     total_price = checkout_solution.checkout("AAAAA")
-    #     assert total_price == expected_total_price
+    def test_checkout_special_offer_5a_for_200(self):
+        expected_total_price = 200
+        total_price = checkout_solution.checkout("AAAAA")
+        assert total_price == expected_total_price
 
     # def test_checkout_special_offer_5a_for_200_extra_a(self):
     #     expected_total_price = 250
