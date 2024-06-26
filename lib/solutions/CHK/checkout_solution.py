@@ -33,9 +33,10 @@ def _is_basket_valid(products_in_basket_sku_list):
     return True
 
 def  _calculate_total_price(products_in_basket_sku_list):
-    number_of_each_item = {k,v for k,v in PRICE_LIST.items()}
+    number_of_each_item = {sku: 0 for sku in PRICE_LIST}
     for sku in products_in_basket_sku_list:
-        number_of_each_item
+        number_of_each_item[sku] += 1
+    breakpoint()
     return sum([PRICE_LIST[sku] for sku in products_in_basket_sku_list])
 
 def checkout(skus: str) -> int:
@@ -55,6 +56,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
