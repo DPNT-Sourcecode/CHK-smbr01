@@ -57,9 +57,8 @@ def _calculate_total_price(products_in_basket_sku_list):
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
 
-    basket_total_post_discounts = basket_sub_total - \
-        (number_of_3a_discounts * 20) - (number_of_b_discounts * 15) - \
-        (potential_number_of_free_b_products * 30)
+    basket_total_post_discounts = basket_sub_total - (number_of_5a_discounts * 50) - (
+        number_of_3a_discounts * 20) - (number_of_b_discounts * 15) - (potential_number_of_free_b_products * 30)
 
     return basket_total_post_discounts
 
@@ -79,4 +78,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
