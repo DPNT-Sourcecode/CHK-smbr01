@@ -17,9 +17,13 @@ import pytest
 # | D    | 15    |                |
 # +------+-------+----------------+
 
+
 class TestChk():
 
     def test_checkout_simple_basket(self):
+        expected_total_price = 115
+        total_price = checkout_solution.checkout("A,B,C,D")
+        assert total_price == expected_total_price
 
 
 
