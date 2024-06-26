@@ -8,14 +8,15 @@ import pytest
 # some items are multi-priced: buy n of them, and they'll cost you y pounds
 
 # Our price table and offers:
-# +------+-------+----------------+
-# | Item | Price | Special offers |
-# +------+-------+----------------+
-# | A    | 50    | 3A for 130     |
-# | B    | 30    | 2B for 45      |
-# | C    | 20    |                |
-# | D    | 15    |                |
-# +------+-------+----------------+
+# +------+-------+------------------------+
+# | Item | Price | Special offers         |
+# +------+-------+------------------------+
+# | A    | 50    | 3A for 130, 5A for 200 |
+# | B    | 30    | 2B for 45              |
+# | C    | 20    |                        |
+# | D    | 15    |                        |
+# | E    | 40    | 2E get one B free      |
+# +------+-------+------------------------+
 
 
 class TestChk():
@@ -51,7 +52,10 @@ class TestChk():
         assert total_price == expected_total_price
     
     def test_checkout_special_offer_3e_for_b(self):
+        # expected_total_price_before_discounts = 40+40+40+30+30
+        # expected_total_price_before_discounts2 = 40+40+40+30+30
         expected_total_price = 40+40+40
-        total_price = checkout_solution.checkout("EEEB")
+        total_price = checkout_solution.checkout("EEBB")
         assert total_price == expected_total_price
+
 
