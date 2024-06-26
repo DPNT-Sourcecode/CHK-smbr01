@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+import pandas as pd
 # noinspection PyUnusedLocal
 # skus = unicode string
 
@@ -79,6 +79,11 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
     "Z": [50, ""],                      
 }
 
+# set up dataframe for item price tabular data
+price_df = pd.DataFrame.from_dict(ITEM_PRICE_DISCOUNT_LOOKUP, orient='index')
+price_df.rename(columns={0: "price", 1: "discount_rule"})
+price_df.rename(columns={0: "price", 1: "discount_rule"}, inplace=True)
+price_df['row_discount'] = 0
 
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
@@ -129,20 +134,22 @@ def _calculate_total_price(products_in_basket_sku_list):
         number_of_each_item[sku] += 1
 
     # check special offers
-    number_of_5a_discounts, a_remainder = divmod(number_of_each_item['A'], 5)
-    number_of_3a_discounts = int(a_remainder / 3)
-    potential_number_of_free_b_products = int(number_of_each_item['E'] / 2)
+    # number_of_5a_discounts, a_remainder = divmod(number_of_each_item['A'], 5)
+    # number_of_3a_discounts = int(a_remainder / 3)
+    # potential_number_of_free_b_products = int(number_of_each_item['E'] / 2)
 
-    temp_b_count = number_of_each_item['B']
-    temp_b_count -= potential_number_of_free_b_products
+    # temp_b_count = number_of_each_item['B']
+    # temp_b_count -= potential_number_of_free_b_products
 
-    if temp_b_count < 0:
-        potential_number_of_free_b_products = 0
+    # if temp_b_count < 0:
+    #     potential_number_of_free_b_products = 0
 
-    number_of_b_discounts = int(temp_b_count / 2)
+    # number_of_b_discounts = int(temp_b_count / 2)
 
-    number_of_f_free = int(number_of_each_item['F'] / 3)
+    # number_of_f_free = int(number_of_each_item['F'] / 3)
 
+    for index, row in df.iterrows():
+        print(row['name'], row['age'])
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
 
@@ -169,9 +176,3 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
-
-
-
-
-
-
