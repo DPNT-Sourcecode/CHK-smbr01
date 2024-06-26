@@ -103,8 +103,8 @@ def discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
         if "for" in discount_rule:
             # it's a multibuy discount
             discount_details = discount_rule.split(" for ")
-            number_of_items_required = discount_details[0][0]
-            discounted_price = discount_details[1]
+            number_of_items_required = int(discount_details[0][0])
+            discounted_price = int(discount_details[1])
             potential_full_price = number_of_items_required * original_price_per_unit
             discount_per_trigger = potential_full_price - discounted_price
             discount_type = 'multibuy'
@@ -150,7 +150,8 @@ def _calculate_total_price(products_in_basket_sku_list):
 
     # manage discounts
     for index, row in price_df.iterrows():
-        discount_parser(row["price"], row["discount_rule"])
+        discount_info = discount_parser(row["price"], row["discount_rule"])
+        breakpoint()
 
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
@@ -178,4 +179,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
