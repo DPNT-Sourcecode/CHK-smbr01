@@ -45,8 +45,8 @@ def _calculate_total_price(products_in_basket_sku_list):
     number_of_b_discounts = int(number_of_each_item['B'] / 2)
 
     potential_number_of_free_b_products = number_of_each_item["B"] - int(number_of_each_item['E'] / 2)
-    actual_number_of_free_b_products = potential_number_of_free_b_products if potential_number_of_free_b_products > 0 else None
-    if actual_number_of_free_b_products 
+    actual_number_of_free_b_products = potential_number_of_free_b_products if potential_number_of_free_b_products > 0 else 0
+
 
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
@@ -77,4 +77,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
