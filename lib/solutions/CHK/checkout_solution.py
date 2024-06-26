@@ -144,7 +144,7 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
-    number_of_discounts_triggered, remainder = divmod(basket_contents_lookup[index], discount_info['number_of_items_required_to_trigger'])
+    number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
     # add it to the target row
     total_discount_for_rule = discount_info['discount_per_trigger'] *  number_of_discounts_triggered
     # return remaining items
@@ -196,9 +196,8 @@ def _calculate_total_price(products_in_basket_sku_list):
         discount_accumulated += evaluated_discount_details['total_discount']
         basket_contents_lookup[index] = evaluated_discount_details['remaining_items_for_future_discounts']
 
-
     basket_total_post_discounts = basket_sub_total - discount_accumulated
-    
+
     # basket_total_post_discounts = basket_sub_total - (number_of_5a_discounts * 50) - (number_of_3a_discounts * 20) - (
     #     number_of_b_discounts * 15) - (potential_number_of_free_b_products * 30) - (number_of_f_free * 10)
 
@@ -220,6 +219,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
