@@ -140,13 +140,18 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
     }
 
 
-def _per_row_discount_evaluator(basket_contents_lookup, index, row, discount_info):
+def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
     number_of_discounts_triggered, remainder = divmod(basket_contents_lookup[index], discount_info['number_of_items_required_to_trigger'])
     # add it to the target row
+    total_discount_for_rule = discount_info['discount_per_trigger'] *  number_of_discounts_triggered
     # return remaining items
+    return {
+        'total_discount': total_discount_for_rule,
+        'remaining_items_for_future_discounts': remainder
+    }
 
 
 
@@ -181,7 +186,7 @@ def _calculate_total_price(products_in_basket_sku_list):
     # manage discounts
     for index, row in price_df.iterrows():
         discount_info = _discount_parser(row["price"], row["discount_rule"])
-        _per_row_discount_evaluator(basket_contents_lookup, index, row, discount_info)
+        _multibuy_evaluator(basket_contents_lookup, index, row, discount_info)
 
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
@@ -209,12 +214,3 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
-
-
-
-
-
-
-
-
-
