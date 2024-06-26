@@ -140,10 +140,12 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
     }
 
 
-def _per_row_discount_evaluator(number_of_each_item_lookup, index, row, discount_info):
+def _per_row_discount_evaluator(basket_contents_lookup, index, row, discount_info):
     # check how many times triggered
-    number_of_items = number_of_each_item_lookup[index]
+    number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
+    import pdb;pdb.set_trace()
+    number_of_discounts_triggered, remainder = divmod(basket_contents_lookup['A'], 5)
     # add it to the target row
 
 
@@ -157,16 +159,16 @@ def _per_row_discount_evaluator(number_of_each_item_lookup, index, row, discount
 
 
 def _calculate_total_price(products_in_basket_sku_list):
-    number_of_each_item_lookup = {sku: 0 for sku in PRICE_LIST}
+    basket_contents_lookup = {sku: 0 for sku in PRICE_LIST}
     for sku in products_in_basket_sku_list:
-        number_of_each_item_lookup[sku] += 1
+        basket_contents_lookup[sku] += 1
 
     # check special offers
-    # number_of_5a_discounts, a_remainder = divmod(number_of_each_item_lookup['A'], 5)
+    # number_of_5a_discounts, a_remainder = divmod(basket_contents_lookup['A'], 5)
     # number_of_3a_discounts = int(a_remainder / 3)
-    # potential_number_of_free_b_products = int(number_of_each_item_lookup['E'] / 2)
+    # potential_number_of_free_b_products = int(basket_contents_lookup['E'] / 2)
 
-    # temp_b_count = number_of_each_item_lookup['B']
+    # temp_b_count = basket_contents_lookup['B']
     # temp_b_count -= potential_number_of_free_b_products
 
     # if temp_b_count < 0:
@@ -174,13 +176,12 @@ def _calculate_total_price(products_in_basket_sku_list):
 
     # number_of_b_discounts = int(temp_b_count / 2)
 
-    # number_of_f_free = int(number_of_each_item_lookup['F'] / 3)
+    # number_of_f_free = int(basket_contents_lookup['F'] / 3)
 
     # manage discounts
     for index, row in price_df.iterrows():
         discount_info = _discount_parser(row["price"], row["discount_rule"])
-        import pdb;pdb.set_trace()
-        _per_row_discount_evaluator(number_of_each_item_lookup, index, row, discount_info)
+        _per_row_discount_evaluator(basket_contents_lookup, index, row, discount_info)
 
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
@@ -208,6 +209,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
