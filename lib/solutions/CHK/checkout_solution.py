@@ -87,7 +87,9 @@ def _is_basket_valid(products_in_basket_sku_list):
     return True
 
 
-# def same_product_multibuy_discount():
+def same_product_multibuy_discount():
+    
+
 
 def _calculate_total_price(products_in_basket_sku_list):
     number_of_each_item = {sku: 0 for sku in PRICE_LIST}
@@ -133,6 +135,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
