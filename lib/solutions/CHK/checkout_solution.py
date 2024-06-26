@@ -41,13 +41,33 @@ import pandas as pd
 # +------+-------+------------------------+
 
 # TODO convert to (data)class if requirements change
-PRICE_LIST = {
-    'A': 50,
-    'B': 30,
-    'C': 20,
-    'D': 15,
-    'E': 40,
-    'F': 10,
+basket_discount_tracker = {
+    "A": 0,
+    "B": 0,
+    "C": 0,
+    "D": 0,
+    "E": 0,
+    "F": 0,
+    "G": 0,
+    "H": 0,
+    "I": 0,
+    "J": 0,
+    "K": 0,
+    "L": 0,
+    "M": 0,
+    "N": 0,
+    "O": 0,
+    "P": 0,
+    "Q": 0,
+    "R": 0,
+    "S": 0,
+    "T": 0,
+    "U": 0,
+    "V": 0,
+    "W": 0,
+    "X": 0,
+    "Y": 0,
+    "Z": 0,
 }
 
 ITEM_PRICE_DISCOUNT_LOOKUP = {
@@ -120,7 +140,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
 
 def _per_row_discount_evaluator(number_of_each_item_lookup, index, row, discount_info):
     # check how many times triggered
-    number_of_each_item_lookup[index]
+    number_of_items = number_of_each_item_lookup[index]
     # calculate total discount
     # add it to the target row
 
@@ -186,6 +206,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
