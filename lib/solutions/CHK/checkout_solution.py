@@ -1,4 +1,4 @@
-
+from dataclasses import dataclass
 
 # noinspection PyUnusedLocal
 # skus = unicode string
@@ -104,5 +104,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
