@@ -18,7 +18,7 @@
 # | D    | 15    |                        |
 # | E    | 40    | 2E get one B free      |
 # | F    | 10    | 2F get one F free      |
-# | G    | 20    |                        |
+# | G    | 20    |                        | <---- new starting here
 # | H    | 10    | 5H for 45, 10H for 80  |
 # | I    | 35    |                        |
 # | J    | 60    |                        |
@@ -51,13 +51,14 @@ PRICE_LIST = {
 }
 
 
-
-
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
         if sku not in PRICE_LIST:
             return False
     return True
+
+
+def same_product_multibuy_discount():
 
 
 def _calculate_total_price(products_in_basket_sku_list):
@@ -104,3 +105,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
