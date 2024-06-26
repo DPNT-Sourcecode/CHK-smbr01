@@ -2,7 +2,7 @@
 
 # noinspection PyUnusedLocal
 # skus = unicode string
-def checkout(skus):
+def checkout(skus: str) -> int:
     # TODO
     # total price of a number of items
     # things are identified using Stock Keeping Units, or SKUs
@@ -17,7 +17,8 @@ def checkout(skus):
     # | C    | 20    |                |
     # | D    | 15    |                |
     # +------+-------+----------------+
-    
+
     raise NotImplementedError()
+
 
 
