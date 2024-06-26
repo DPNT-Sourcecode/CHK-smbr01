@@ -93,12 +93,17 @@ def rule_parser(discount_rule: str):
     if len(discount_rules) == 2:
         # clear up any leading whitespace
         discount_rules[1] = discount_rules[1].lstrip()
-    
+
     for discount_rule in discount_rules:
         if "for" in discount_rule:
             # it's a multibuy discount
-            # discount_details = discount_rule.split(" for ")
-            number_for_free = discount_rule
+            discount_details = discount_rule.split(" for ")
+            number_for_free = discount_details[0][0]
+            price = discount_details[1]
+    
+    return {
+        
+    }
 
 
 
@@ -156,6 +161,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
