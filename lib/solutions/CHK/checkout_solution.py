@@ -100,9 +100,15 @@ def rule_parser(discount_rule: str):
             discount_details = discount_rule.split(" for ")
             number_for_free = discount_details[0][0]
             price = discount_details[1]
-    
+            
+            discount_per_trigger = potential_full_price - discounted_price
+            discount_type = 'multibuy'
+            discount_target_sku = discount_details[0][1]
+    breakpoint()
     return {
-        
+        "type": discount_type, 
+        "discount": price,
+        "discount_target_sku": discount_target_sku
     }
 
 
@@ -161,6 +167,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
