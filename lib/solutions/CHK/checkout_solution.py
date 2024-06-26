@@ -32,9 +32,10 @@ def _is_basket_valid(products_in_basket_sku_list):
             return False
     return True
 
-def  _calculate_total_price():
+def  _calculate_total_price(products_in_basket_sku_list):
+    number_of_each_item = {}
     
-    return 0
+    return sum([PRICE_LIST[sku] for sku in products_in_basket_sku_list])
 
 def checkout(skus: str) -> int:
     if "," in skus:
@@ -50,9 +51,10 @@ def checkout(skus: str) -> int:
 
     # TODO handle special offers
     if basket_valid:
-        return sum([PRICE_LIST[sku] for sku in products_in_basket_sku_list])
+        return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
