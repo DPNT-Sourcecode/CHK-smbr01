@@ -182,11 +182,15 @@ def _calculate_total_price(products_in_basket_sku_list):
     # number_of_b_discounts = int(temp_b_count / 2)
 
     # number_of_f_free = int(basket_contents_lookup['F'] / 3)
-
+    discount_accumulation = 0
     # manage discounts
     for index, row in price_df.iterrows():
         discount_info = _discount_parser(row["price"], row["discount_rule"])
-        _multibuy_evaluator(basket_contents_lookup, index, row, discount_info)
+        evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_info)
+        # update discount total, and amount of items left for discount
+        discount_accumulation += evaluated_discount_details['total_discount']
+        basket_contents_lookup[index] = evaluated_discount_details['total_discount']
+        import pdb;pdb.set_trace()
 
     basket_sub_total = sum([PRICE_LIST[sku]
                            for sku in products_in_basket_sku_list])
@@ -214,3 +218,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
