@@ -105,7 +105,7 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
 price_df = pd.DataFrame.from_dict(ITEM_PRICE_DISCOUNT_LOOKUP, orient='index')
 price_df.rename(columns={0: "price", 1: "discount_rule"})
 price_df.rename(columns={0: "price", 1: "discount_rule"}, inplace=True)
-price_df['row_discount'] = 0
+
 
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
@@ -121,6 +121,8 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
         # clear up any leading whitespace
         discount_rules[1] = discount_rules[1].lstrip()
 
+    parsed_rules_info = []
+
     for discount_rule in discount_rules:
         if "for" in discount_rule:
             # it's a multibuy discount
@@ -131,13 +133,14 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             discount_per_trigger = potential_full_price - discounted_price
             discount_type = 'multibuy'
             discount_target_sku = discount_details[0][1]
-    # TODO handle those with 2 rules
-    return {
-        "type": discount_type,
-        "discount_per_trigger": discount_per_trigger,
-        "number_of_items_required_to_trigger": number_of_items_required_to_trigger,
-        "discount_target_sku": discount_target_sku
-    }
+            parsed_rules_info.append({
+                "type": discount_type,
+                "discount_per_trigger": discount_per_trigger,
+                "number_of_items_required_to_trigger": number_of_items_required_to_trigger,
+                "discount_target_sku": discount_target_sku
+            })
+
+    return parsed_rules_info
 
 
 def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
@@ -146,7 +149,7 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     # calculate total discount
     number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
     # add it to the target row
-    total_discount_for_rule = discount_info['discount_per_trigger'] *  number_of_discounts_triggered
+    total_discount_for_rule = discount_info['discount_per_trigger'] * number_of_discounts_triggered
     # return remaining items
     return {
         'total_discount': total_discount_for_rule,
@@ -219,6 +222,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
