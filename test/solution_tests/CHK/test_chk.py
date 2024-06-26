@@ -1,8 +1,6 @@
+from solutions.CHK import checkout_solution
 
 
-# noinspection PyUnusedLocal
-# skus = unicode string
-def checkout(skus):
     # TODO
     # total price of a number of items
     # things are identified using Stock Keeping Units, or SKUs
@@ -17,7 +15,8 @@ def checkout(skus):
     # | C    | 20    |                |
     # | D    | 15    |                |
     # +------+-------+----------------+
-    
-    raise NotImplementedError()
 
-
+class TestChk():
+    def test_chk_1(self):
+        
+        # assert sum_solution.compute(1, 2) == 3
