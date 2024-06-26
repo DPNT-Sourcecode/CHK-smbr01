@@ -24,10 +24,11 @@ class TestChk():
     #         checkout_solution.checkout(None)
     #     # assert sum_solution.compute(1, 2) == 3
 
-    def test_chk_1(self):
+    def test_checkout_simple_basket(self):
         # Just an initial test to ensure it can find the module
         with pytest.raises(NotImplementedError):
             checkout_solution.checkout(None)
         # assert sum_solution.compute(1, 2) == 3
+
 
 
