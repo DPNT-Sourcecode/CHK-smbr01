@@ -90,7 +90,7 @@ class TestChk():
         expected_total_price = 20
         total_price = checkout_solution.checkout("FFF")
         assert total_price == expected_total_price
-    
+
     def test_checkout_no_special_offer_f(self):
         expected_total_price = 20
         total_price = checkout_solution.checkout("FF")
@@ -100,5 +100,3 @@ class TestChk():
         expected_total_price = 30
         total_price = checkout_solution.checkout("FFFF")
         assert total_price == expected_total_price
-
-
