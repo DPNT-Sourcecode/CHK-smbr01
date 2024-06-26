@@ -99,7 +99,7 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
     "Z": [50, ""],                      
 }
 
-PRICE_LIST = ITEM_PRICE_DISCOUNT_LOOKUP.keys()
+# PRICE_LIST = ITEM_PRICE_DISCOUNT_LOOKUP.keys()
 
 # set up dataframe for item price tabular data
 price_df = pd.DataFrame.from_dict(ITEM_PRICE_DISCOUNT_LOOKUP, orient='index')
@@ -109,7 +109,7 @@ price_df['row_discount'] = 0
 
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
-        if sku not in PRICE_LIST:
+        if sku not in ITEM_PRICE_DISCOUNT_LOOKUP:
             return False
     return True
 
@@ -164,7 +164,7 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
 
 
 def _calculate_total_price(products_in_basket_sku_list):
-    basket_contents_lookup = {sku: 0 for sku in PRICE_LIST}
+    basket_contents_lookup = {sku: 0 for sku in ITEM_PRICE_DISCOUNT_LOOKUP}
     for sku in products_in_basket_sku_list:
         basket_contents_lookup[sku] += 1
 
@@ -182,7 +182,8 @@ def _calculate_total_price(products_in_basket_sku_list):
     # number_of_b_discounts = int(temp_b_count / 2)
 
     # number_of_f_free = int(basket_contents_lookup['F'] / 3)
-    basket_sub_total = sum([PRICE_LIST[sku]
+    # import pdb;pdb.set_trace()
+    basket_sub_total = sum([ITEM_PRICE_DISCOUNT_LOOKUP[sku][0]
                            for sku in products_in_basket_sku_list])
 
     discount_accumulated = 0
@@ -219,5 +220,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
