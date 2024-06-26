@@ -24,9 +24,9 @@ class TestChk():
         expected_total_price = 115
         total_price = checkout_solution.checkout("ABCD")
         assert total_price == expected_total_price
-    
+
     def test_checkout_extra_item_basket(self):
-        expected_total_price = 115
+        expected_total_price = 130
         total_price = checkout_solution.checkout("ABCDD")
         assert total_price == expected_total_price
 
@@ -44,5 +44,6 @@ class TestChk():
         expected_total_price = 75
         total_price = checkout_solution.checkout("BBB")
         assert total_price == expected_total_price
+
 
 
