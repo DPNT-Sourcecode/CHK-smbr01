@@ -27,13 +27,18 @@ PRICE_LIST = {
 }
 
 def checkout(skus: str) -> int:
-    # assuming SKUs are comma seperated, won't know until run
-    products_in_basket_sku_list = skus.split(",")
+    if "," in skus:
+        # assuming SKUs are comma seperated, won't know until run
+        products_in_basket_sku_list = skus.split(",")
 
-    # fallback plan if not comma seperated
-    count = string.count("")
+    # TODO fallback plan if not comma seperated
+    # countA = skus.count("A")
+    # countB = skus.count("B")
+    # countC = skus.count("C")
+    # countD = skus.count("D")
 
     # TODO handle illegal input
     # TODO handle special offers
     return sum([PRICE_LIST[sku] for sku in products_in_basket_sku_list])
+
 
