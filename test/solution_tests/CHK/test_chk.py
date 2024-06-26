@@ -22,26 +22,27 @@ class TestChk():
 
     def test_checkout_simple_basket(self):
         expected_total_price = 115
-        total_price = checkout_solution.checkout("A,B,C,D")
+        total_price = checkout_solution.checkout("ABCD")
         assert total_price == expected_total_price
     
     def test_checkout_extra_item_basket(self):
         expected_total_price = 115
-        total_price = checkout_solution.checkout("A,B,C,D,D")
+        total_price = checkout_solution.checkout("ABCDD")
         assert total_price == expected_total_price
 
     def test_checkout_invalid_basket(self):
         expected_response = -1
-        response = checkout_solution.checkout("A,B,@%@£%,C,D")
+        response = checkout_solution.checkout("AB@%@£%CD")
         assert response == expected_response
 
     def test_checkout_special_offer_a(self):
         expected_total_price = 130
-        total_price = checkout_solution.checkout("A,A,A")
+        total_price = checkout_solution.checkout("AAA")
         assert total_price == expected_total_price
-    
+
     def test_checkout_special_offer_b(self):
         expected_total_price = 75
-        total_price = checkout_solution.checkout("B,B,B")
+        total_price = checkout_solution.checkout("BBB")
         assert total_price == expected_total_price
+
 

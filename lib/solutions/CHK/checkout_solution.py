@@ -56,8 +56,8 @@ def checkout(skus: str) -> int:
     if not skus:
         return -1
 
-    # assuming SKUs are comma seperated, won't know until run
-    products_in_basket_sku_list = skus.split(",")
+    # SKUs come in as a simple list of chars, no seperator
+    products_in_basket_sku_list = list(skus)
 
     basket_valid = _is_basket_valid(products_in_basket_sku_list)
     # TODO fallback plan if not comma seperated
@@ -70,6 +70,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
