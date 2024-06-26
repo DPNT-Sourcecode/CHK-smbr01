@@ -99,7 +99,7 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
     "Z": [50, ""],                      
 }
 
-PRICE_LIST = ITEM_PRICE_DISCOUNT_LOOKUP
+PRICE_LIST = ITEM_PRICE_DISCOUNT_LOOKUP.keys()
 
 # set up dataframe for item price tabular data
 price_df = pd.DataFrame.from_dict(ITEM_PRICE_DISCOUNT_LOOKUP, orient='index')
@@ -182,20 +182,21 @@ def _calculate_total_price(products_in_basket_sku_list):
     # number_of_b_discounts = int(temp_b_count / 2)
 
     # number_of_f_free = int(basket_contents_lookup['F'] / 3)
-    discount_accumulation = 0
+    basket_sub_total = sum([PRICE_LIST[sku]
+                           for sku in products_in_basket_sku_list])
+
+    discount_accumulated = 0
+
     # manage discounts
     for index, row in price_df.iterrows():
         discount_info = _discount_parser(row["price"], row["discount_rule"])
         evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_info)
         # update discount total, and amount of items left for discount
-        discount_accumulation += evaluated_discount_details['total_discount']
-        basket_contents_lookup[index] = evaluated_discount_details['total_discount']
-        import pdb;pdb.set_trace()
+        discount_accumulated += evaluated_discount_details['total_discount']
+        basket_contents_lookup[index] = evaluated_discount_details['remaining_items_for_future_discounts']
 
-    basket_sub_total = sum([PRICE_LIST[sku]
-                           for sku in products_in_basket_sku_list])
 
-    basket_total_post_discounts = basket_sub_total - (number_of_3a_discounts * 20)
+    basket_total_post_discounts = basket_sub_total - discount_accumulated
     
     # basket_total_post_discounts = basket_sub_total - (number_of_5a_discounts * 50) - (number_of_3a_discounts * 20) - (
     #     number_of_b_discounts * 15) - (potential_number_of_free_b_products * 30) - (number_of_f_free * 10)
@@ -218,4 +219,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
