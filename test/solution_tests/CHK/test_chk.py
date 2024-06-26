@@ -51,11 +51,6 @@ class TestChk():
         assert total_price == expected_total_price
     
     def test_checkout_special_offer_3e_for_b(self):
-        expected_total_price = 
+        expected_total_price = 40+40+40+30
         total_price = checkout_solution.checkout("EEEB")
         assert total_price == expected_total_price
-
-
-
-
-
