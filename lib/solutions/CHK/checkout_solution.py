@@ -77,26 +77,26 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
     "D": [15, ""],                      
     "E": [40, "2E get one B free"],     
     "F": [10, "2F get one F free"],     
-    "G": [20, ""],                      
-    "H": [10, "5H for 45, 10H for 80"], 
-    "I": [35, ""],                      
-    "J": [60, ""],                      
-    "K": [80, "2K for 150"],            
-    "L": [90, ""],                      
-    "M": [15, ""],                      
-    "N": [40, "3N get one M free"],     
-    "O": [10, ""],                      
-    "P": [50, "5P for 200"],            
-    "Q": [30, "3Q for 80"],             
-    "R": [50, "3R get one Q free"],     
-    "S": [30, ""],                      
-    "T": [20, ""],                      
-    "U": [40, "3U get one U free"],     
-    "V": [50, "2V for 90, 3V for 130"], 
-    "W": [20, ""],                      
-    "X": [90, ""],                      
-    "Y": [10, ""],                      
-    "Z": [50, ""],                      
+    # "G": [20, ""],                      
+    # "H": [10, "5H for 45, 10H for 80"], 
+    # "I": [35, ""],                      
+    # "J": [60, ""],                      
+    # "K": [80, "2K for 150"],            
+    # "L": [90, ""],                      
+    # "M": [15, ""],                      
+    # "N": [40, "3N get one M free"],     
+    # "O": [10, ""],                      
+    # "P": [50, "5P for 200"],            
+    # "Q": [30, "3Q for 80"],             
+    # "R": [50, "3R get one Q free"],     
+    # "S": [30, ""],                      
+    # "T": [20, ""],                      
+    # "U": [40, "3U get one U free"],     
+    # "V": [50, "2V for 90, 3V for 130"], 
+    # "W": [20, ""],                      
+    # "X": [90, ""],                      
+    # "Y": [10, ""],                      
+    # "Z": [50, ""],                      
 }
 
 # PRICE_LIST = ITEM_PRICE_DISCOUNT_LOOKUP.keys()
@@ -213,7 +213,7 @@ def _calculate_total_price(products_in_basket_sku_list):
 
     # manage discounts
     # TODO invert this to loop through basket items only
-    for index, row in price_df[4:5].iterrows():
+    for index, row in price_df.iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
 
@@ -221,11 +221,10 @@ def _calculate_total_price(products_in_basket_sku_list):
                 evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
             else:
                 evaluated_discount_details = _bogof_evaluator(basket_contents_lookup, index, row, discount_rule)
-                import pdb;pdb.set_trace()
 
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
-            basket_contents_lookup[index] = evaluated_discount_details['remaining_items_for_future_discounts']
+            basket_contents_lookup[discount_rule['discount_target_sku']] = evaluated_discount_details['remaining_items_for_future_discounts']
 
     basket_total_post_discounts = basket_sub_total - discount_accumulated
 
@@ -250,6 +249,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
