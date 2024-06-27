@@ -2,11 +2,6 @@ from solutions.CHK import checkout_solution
 import pytest
 # TODO check coverage
 
-# TODO
-# total price of a number of items
-# things are identified using Stock Keeping Units, or SKUs
-# some items are multi-priced: buy n of them, and they'll cost you y pounds
-
 # Our price table and offers:
 # +------+-------+------------------------+
 # | Item | Price | Special offers         |
@@ -17,7 +12,7 @@ import pytest
 # | D    | 15    |                        |
 # | E    | 40    | 2E get one B free      |
 # | F    | 10    | 2F get one F free      |
-# | G    | 20    |                        |  <---- new starting here
+# | G    | 20    |                        | 
 # | H    | 10    | 5H for 45, 10H for 80  |
 # | I    | 35    |                        |
 # | J    | 60    |                        |
@@ -38,10 +33,6 @@ import pytest
 # | Y    | 10    |                        |
 # | Z    | 50    |                        |
 # +------+-------+------------------------+
-
-
-
-
 
 class TestChk():
     def test_checkout_empty_basket(self):
@@ -126,7 +117,7 @@ class TestChk():
         expected_total_price = 10
         total_price = checkout_solution.checkout("H")
         assert total_price == expected_total_price
-    
+
     def test_checkout_alphabet(self):
         expected_total_price = 965
         total_price = checkout_solution.checkout("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -141,8 +132,9 @@ class TestChk():
         expected_total_price = 80
         total_price = checkout_solution.checkout("HHHHHHHHHH")
         assert total_price == expected_total_price
-    
+
     def test_HHHHHHHHHHH(self):
         expected_total_price = 90
         total_price = checkout_solution.checkout("HHHHHHHHHHH")
         assert total_price == expected_total_price
+
