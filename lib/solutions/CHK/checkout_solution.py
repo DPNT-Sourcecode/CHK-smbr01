@@ -40,64 +40,6 @@ import pandas as pd
 # | Z    | 50    |                        |
 # +------+-------+------------------------+
 
-# TODO convert to (data)class if requirements change
-basket_discount_tracker = {
-    "A": 0,
-    "B": 0,
-    "C": 0,
-    "D": 0,
-    "E": 0,
-    "F": 0,
-    "G": 0,
-    "H": 0,
-    "I": 0,
-    "J": 0,
-    "K": 0,
-    "L": 0,
-    "M": 0,
-    "N": 0,
-    "O": 0,
-    "P": 0,
-    "Q": 0,
-    "R": 0,
-    "S": 0,
-    "T": 0,
-    "U": 0,
-    "V": 0,
-    "W": 0,
-    "X": 0,
-    "Y": 0,
-    "Z": 0,
-}
-# sorted by BOGOF first (NOTE a python version should be used which retains dictionary order)
-# ITEM_PRICE_DISCOUNT_LOOKUP = {
-#     "E": [40, "2E get one B free"],
-#     "F": [10, "2F get one F free"],
-#     "N": [40, "3N get one M free"],
-#     "R": [50, "3R get one Q free"],
-#     "U": [40, "3U get one U free"],
-#     "A": [50, "3A for 130, 5A for 200"],
-#     "B": [30, "2B for 45"],
-#     "C": [20, ""],
-#     "D": [15, ""],
-#     "G": [20, ""],
-#     "H": [10, "5H for 45, 10H for 80"],
-#     "I": [35, ""],
-#     "J": [60, ""],
-#     "K": [80, "2K for 150"],
-#     "L": [90, ""],
-#     "M": [15, ""],
-#     "O": [10, ""],
-#     "P": [50, "5P for 200"],
-#     "Q": [30, "3Q for 80"],
-#     "S": [30, ""],
-#     "T": [20, ""],
-#     "V": [50, "2V for 90, 3V for 130"],
-#     "W": [20, ""],
-#     "X": [90, ""],
-#     "Y": [10, ""],
-#     "Z": [50, ""],
-# }
 
 # set up dataframe for item price tabular data
 # TODO save this dataframe to disk for efficiency, it doesn't change very often
@@ -112,6 +54,9 @@ price_df['rule_ranking'] = 0
 price_df = price_df.assign(rule_ranking=[2 if " get one " in x else 0 for x in price_df['discount_rule']])
 # Sort the discount rules by their ranking
 price_df.sort_values('rule_ranking', ascending=False, inplace=True)
+
+# TODO compute this automatically in future
+SKUS_IN_3_FOR_45_OFFER = ['S,T,X,Y,Z']
 
 # TODO check if this interferes with the last rule
 # price_df = price_df.assign(rule_type=[1 if " for " in x else 0 for x in price_df['discount_rule']])
@@ -220,14 +165,13 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
         'remaining_items_for_future_discounts': number_in_discount_target_basket - number_of_discounts_triggered
     }
 
-# TODO compute this automatically in future
-skus_with_offer = ['S,T,X,Y,Z']
-
 def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
     # accumulate the amount spent on S,T,X,Y,Z collectively
 
-
-    basket_contents_lookup['S']
+    # check how many times triggered
+    number_of_this_item_in_basket = basket_contents_lookup[index]
+    number_of_discounts_triggered, remainder = divmod(
+        number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
     # enough for a discount?
     import pdb;pdb.set_trace()
 
@@ -284,3 +228,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
