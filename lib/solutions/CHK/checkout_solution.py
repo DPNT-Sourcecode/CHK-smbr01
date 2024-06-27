@@ -204,7 +204,7 @@ def _calculate_total_price(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
         basket_contents_lookup[sku] += 1
     import pdb;pdb.set_trace()
-    basket_sub_total = sum([ITEM_PRICE_DISCOUNT_LOOKUP[sku][0]
+    basket_sub_total = sum([price_df[f"{sku}:{sku}"][0]
                            for sku in products_in_basket_sku_list])
 
     discount_accumulated = 0
@@ -246,5 +246,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
