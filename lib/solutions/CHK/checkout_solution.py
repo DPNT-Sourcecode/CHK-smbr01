@@ -120,6 +120,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
     if len(discount_rules) == 2:
         # clear up any leading whitespace
         discount_rules[1] = discount_rules[1].lstrip()
+        discount_rules = list(reversed(discount_rules))
 
     parsed_rules_info = []
 
@@ -184,10 +185,12 @@ def _calculate_total_price(products_in_basket_sku_list):
     discount_accumulated = 0
 
     # manage discounts
-    for index, row in price_df.iterrows():
+    # for index, row in price_df.iterrows():
+    for index, row in price_df[:1].iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
-            evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_info)
+            import pdb;pdb.set_trace()
+            evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
             basket_contents_lookup[index] = evaluated_discount_details['remaining_items_for_future_discounts']
@@ -215,6 +218,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
