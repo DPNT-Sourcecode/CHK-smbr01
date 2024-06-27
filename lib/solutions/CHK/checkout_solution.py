@@ -69,7 +69,7 @@ basket_discount_tracker = {
     "Y": 0,
     "Z": 0,
 }
-
+# TODO sort by BOGOF first I think
 ITEM_PRICE_DISCOUNT_LOOKUP = {
     "A": [50, "3A for 130, 5A for 200"],
     "B": [30, "2B for 45"],             
@@ -142,22 +142,21 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
                 "discount_target_sku": discount_target_sku
             })
         elif "get one" in discount_rule:
-            import pdb;pdb.set_trace()
             # it's a buy one get something free discount
             # e.g. "2E get one B free"
             discount_details = discount_rule.split(" get one ")
             number_of_items_required_to_trigger = int(discount_details[0][0])
-            discounted_price = int(discount_details[1])
             discount_type = 'bogof'
             discount_target_sku = discount_details[1][0]
-            potential_full_price = number_of_items_required_to_trigger * 
-            discount_per_trigger = potential_full_price - discounted_price
+            discount_per_trigger = ITEM_PRICE_DISCOUNT_LOOKUP[discount_target_sku][0]
             parsed_rules_info.append({
                 "type": discount_type,
                 "discount_per_trigger": discount_per_trigger,
                 "number_of_items_required_to_trigger": number_of_items_required_to_trigger,
                 "discount_target_sku": discount_target_sku
             })
+            import pdb;pdb.set_trace()
+
     return parsed_rules_info
 
 
@@ -239,4 +238,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
