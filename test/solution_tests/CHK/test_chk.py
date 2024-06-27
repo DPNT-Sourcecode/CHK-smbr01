@@ -142,38 +142,44 @@ class TestChk():
         expected_total_price = 45
         total_price = checkout_solution.checkout("SSS")
         assert total_price == expected_total_price
-    
+
     def test_3z(self):
         expected_total_price = 45
         total_price = checkout_solution.checkout("ZZZ")
         assert total_price == expected_total_price
-    
+
     def test_6z(self):
         expected_total_price = 90
         total_price = checkout_solution.checkout("ZZZZZZ")
         assert total_price == expected_total_price
-    
+
     def test_7z(self):
         expected_total_price = 111
         total_price = checkout_solution.checkout("ZZZZZZZ")
         assert total_price == expected_total_price
-    
+
     def test_3_for_45_mixed_1(self):
         expected_total_price = 45+37
         # ['Z','S','Y','T','X']
         total_price = checkout_solution.checkout("ZSYTX")
-        assert total_price == expected_total_price
-    
-    def test_3_for_45_mixed_1_reversed(self):
-        expected_total_price = 45+37
-        # ['Z','S','Y','T','X']
-        total_price = checkout_solution.checkout("XTYSZ")
         assert total_price == expected_total_price
 
     def test_3_for_45_mixed_1_reversed(self):
         expected_total_price = 45+37
         # ['Z','S','Y','T','X']
         total_price = checkout_solution.checkout("XTYSZ")
+        assert total_price == expected_total_price
+
+    def test_3_for_45_mixed_2(self):
+        expected_total_price = 45+45+45+45+17
+        # ['Z','S','Y','T','X']
+        total_price = checkout_solution.checkout("XXXTTTYYSYSSZ")
+        assert total_price == expected_total_price
+    
+    def test_3_for_45_mixed_2(self):
+        expected_total_price = 45+45+45+45+17
+        # ['Z','S','Y','T','X']
+        total_price = checkout_solution.checkout("XXX£$%^&*()TTTYYSYSSZ")
         assert total_price == expected_total_price
 
 
