@@ -108,8 +108,9 @@ price_df.columns = ['price', 'discount_rule']
 price_df['rule_type'] = 0
 # top-ranking rule == 2
 price_df = price_df.assign(rule_type=[2 if " get one " in x else 0 for x in price_df['discount_rule']])
-
-
+# TODO check if this interferes with the last rule
+# price_df = price_df.assign(rule_type=[1 if " for " in x else 0 for x in price_df['discount_rule']])
+import pdb;pdb.set_trace()
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
         if sku not in price_df.index:
@@ -267,6 +268,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
