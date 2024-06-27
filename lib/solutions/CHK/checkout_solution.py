@@ -143,7 +143,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             # e.g. "2E get one B free"
             discount_details = discount_rule.split(" get one ")
             # add 1, because we need an extra item in the basket for the bogof to trigger
-            number_of_items_required_to_trigger = int(discount_details[0][0])
+            number_of_items_required_to_trigger = int(discount_details[0][0]) + 1
             discount_type = 'bogof'
             discount_target_sku = discount_details[1][0]
             discount_per_trigger = ITEM_PRICE_DISCOUNT_LOOKUP[discount_target_sku][0]
@@ -194,7 +194,7 @@ def _calculate_total_price(products_in_basket_sku_list):
     discount_accumulated = 0
 
     # manage discounts
-    for index, row in price_df[1:2].iterrows():
+    for index, row in price_df.iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
             if discount_rule['type'] == 'multibuy':
@@ -229,6 +229,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
