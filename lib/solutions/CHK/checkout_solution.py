@@ -71,12 +71,12 @@ basket_discount_tracker = {
 }
 # TODO sort by BOGOF first I think
 ITEM_PRICE_DISCOUNT_LOOKUP = {
+    "E": [40, "2E get one B free"],     
+    "F": [10, "2F get one F free"],     
     "A": [50, "3A for 130, 5A for 200"],
     "B": [30, "2B for 45"],             
     "C": [20, ""],                      
     "D": [15, ""],                      
-    "E": [40, "2E get one B free"],     
-    "F": [10, "2F get one F free"],     
     # "G": [20, ""],                      
     # "H": [10, "5H for 45, 10H for 80"], 
     # "I": [35, ""],                      
@@ -105,7 +105,7 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
 price_df = pd.DataFrame.from_dict(ITEM_PRICE_DISCOUNT_LOOKUP, orient='index')
 price_df.rename(columns={0: "price", 1: "discount_rule"})
 price_df.rename(columns={0: "price", 1: "discount_rule"}, inplace=True)
-
+import pdb;pdb.set_trace()
 
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
@@ -251,11 +251,3 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
-
-
-
-
-
-
-
-
