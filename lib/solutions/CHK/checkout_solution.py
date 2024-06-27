@@ -174,20 +174,29 @@ def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
     # accumulate the amount spent on S,T,X,Y,Z collectively
 
     # check how many times triggered
-    number_of_this_item_in_basket = basket_contents_lookup[index]
+    total_number_of_eligible_items_in_basket = 0
+    for sku in SKUS_IN_3_FOR_45_OFFER:
+        total_number_of_eligible_items_in_basket += basket_contents_lookup[sku]
+
     number_of_discounts_triggered, remainder = divmod(
-        number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
-    
-    total_discount_for_rule = 0
+        total_number_of_eligible_items_in_basket, discount_info['number_of_items_required_to_trigger'])
 
     import pdb;pdb.set_trace()
-    if number_of_discounts_triggered:
-        # remove the highest priced item in the range
-        # TODO test when sku==index
-        for sku in SKUS_IN_3_FOR_45_OFFER:
-            if basket_contents_lookup[sku]:
 
-                import pdb;pdb.set_trace()
+    # number_of_this_item_in_basket = basket_contents_lookup[index]
+    # number_of_discounts_triggered, remainder = divmod(
+    #     number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
+    
+    # total_discount_for_rule = 0
+
+    # import pdb;pdb.set_trace()
+    # if number_of_discounts_triggered:
+    #     # remove the highest priced item in the range
+    #     # TODO test when sku==index
+    #     for sku in SKUS_IN_3_FOR_45_OFFER:
+    #         if basket_contents_lookup[sku]:
+
+    #             import pdb;pdb.set_trace()
                 # discount here
                 # total_discount_for_rule += _get_sku_price(sku)
                 # remove item
@@ -230,7 +239,8 @@ def _calculate_total_price(products_in_basket_sku_list):
             basket_contents_lookup[discount_rule['discount_target_sku']
                                    ] = evaluated_discount_details['remaining_items_for_future_discounts']
 
-    
+    # TODO experiment with having this at the start or end
+    _3_for_45_evaluator(basket_contents_lookup, index, row, discount_rule)
 
     basket_total_post_discounts = basket_sub_total - discount_accumulated
 
@@ -252,6 +262,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
