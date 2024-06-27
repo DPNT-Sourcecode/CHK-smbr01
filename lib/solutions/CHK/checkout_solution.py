@@ -173,11 +173,16 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
 def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
     total_number_of_eligible_items_in_basket = 0
 
+    original_price = 0
+    count = 0
     for sku in SKUS_IN_3_FOR_45_OFFER:
-        original_price = 0
-        count = 0
         original_price += _get_sku_price(sku)
         count += basket_contents_lookup[sku]
+        if count == 4:
+            # calc discount
+            discount = original_price - 45
+            # reset counters
+            # remove items
         import pdb;pdb.set_trace()
         # discount_triggered
 
@@ -275,4 +280,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
