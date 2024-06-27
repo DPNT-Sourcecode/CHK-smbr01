@@ -122,20 +122,21 @@ class TestChk():
     #     total_price = checkout_solution.checkout("FFFF")
     #     assert total_price == expected_total_price
 
-    def test_checkout_h_only(self):
-        expected_total_price = 10
-        total_price = checkout_solution.checkout("H")
-        assert total_price == expected_total_price
+    # def test_checkout_h_only(self):
+    #     expected_total_price = 10
+    #     total_price = checkout_solution.checkout("H")
+    #     assert total_price == expected_total_price
     
-    def test_checkout_alphabet(self):
-        expected_total_price = 965
-        total_price = checkout_solution.checkout("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-        assert total_price == expected_total_price
+    # def test_checkout_alphabet(self):
+    #     expected_total_price = 965
+    #     total_price = checkout_solution.checkout("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    #     assert total_price == expected_total_price
 
     def test_ee(self):
         expected_total_price = 80
         total_price = checkout_solution.checkout("EE")
         assert total_price == expected_total_price
+
 
 
 

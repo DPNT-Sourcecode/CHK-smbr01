@@ -71,17 +71,17 @@ basket_discount_tracker = {
 }
 # sorted by BOGOF first (NOTE a python version should be used which retains dictionary order)
 ITEM_PRICE_DISCOUNT_LOOKUP = {
-    # "E": [40, "2E get one B free"],
+    "E": [40, "2E get one B free"],
     # "F": [10, "2F get one F free"],
     # "N": [40, "3N get one M free"],
     # "R": [50, "3R get one Q free"],
     # "U": [40, "3U get one U free"],
     # "A": [50, "3A for 130, 5A for 200"],
-    # "B": [30, "2B for 45"],
+    "B": [30, "2B for 45"],
     # "C": [20, ""],
     # "D": [15, ""],
     # "G": [20, ""],
-    "H": [10, "5H for 45, 10H for 80"],
+    # "H": [10, "5H for 45, 10H for 80"],
     # "I": [35, ""],
     # "J": [60, ""],
     # "K": [80, "2K for 150"],
@@ -167,7 +167,7 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     total_discount_for_rule = discount_info['discount_per_trigger'] * \
         number_of_discounts_triggered
 
-    import pdb;pdb.set_trace()
+    # import pdb;pdb.set_trace()
     return {
         'total_discount': total_discount_for_rule,
         'remaining_items_for_future_discounts': remainder
@@ -180,7 +180,7 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
     # calculate total discount
     number_of_discounts_triggered, remainder = divmod(
         number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
-
+    import pdb;pdb.set_trace()
     # If the free product isn't in the basket, we won't award the discount
     if discount_info['discount_target_sku'] == index and number_of_discounts_triggered and not remainder:
         number_of_discounts_triggered -= 1
@@ -242,6 +242,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
