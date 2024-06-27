@@ -216,11 +216,11 @@ def _calculate_total_price(products_in_basket_sku_list):
     for index, row in price_df.iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
-
             if discount_rule['type'] is 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
             else:
                 evaluated_discount_details = _bogof_evaluator(basket_contents_lookup, index, row, discount_rule)
+                import pdb;pdb.set_trace()
 
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
@@ -249,6 +249,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
