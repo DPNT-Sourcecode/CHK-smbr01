@@ -3,8 +3,8 @@
 import pandas as pd
 
 # set up dataframe for item price tabular data
-# TODO save this dataframe to disk for efficiency in future, it doesn't change very often
-# would save re-building at runtime
+# TODO save this dataframe to disk for efficiency in future;
+# it doesn't change very often would save re-building at runtime
 price_df = pd.read_csv('lib/solutions/CHK/item_price.csv', sep="|")
 price_df.columns = price_df.columns.str.strip()
 price_df = price_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
@@ -17,17 +17,9 @@ price_df = price_df.assign(rule_ranking=[2 if " get one " in x else 0 for x in p
 # Sort the discount rules by their ranking
 price_df.sort_values('rule_ranking', ascending=False, inplace=True)
 
-# TODO compute this automatically in future
-SKUS_IN_3_FOR_45_OFFER = ['Z','S','Y','T','X']
-# | Z    | 21 
-# | S    | 20  
-# | Y    | 20 
-# | T    | 20 
-# | X    | 17 
-
-# TODO check if this interferes with the last rule, could do and not "buy any" to differentiate them
-# price_df = price_df.assign(rule_type=[1 if " for " in x else 0 for x in price_df['discount_rule']])
-# import pdb;pdb.set_trace()
+# Sorted by highest value to give the user the best value discount
+# TODO compute this automatically in future, especially if list concerned grows considerably
+SKUS_IN_3_FOR_45_OFFER = ['Z', 'S', 'Y', 'T', 'X']
 
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
@@ -35,8 +27,10 @@ def _is_basket_valid(products_in_basket_sku_list):
             return False
     return True
 
+
 def _get_sku_price(sku):
     return price_df[sku:sku]['price'].iloc[0]
+
 
 def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
 
@@ -149,7 +143,7 @@ def _3_for_45_evaluator(basket_contents_lookup: dict) -> int:
     return total_discount
 
 
-def _calculate_total_price(products_in_basket_sku_list):
+def _calculate_total_price(products_in_basket_sku_list: list) -> :
     basket_contents_lookup = {sku: 0 for sku in price_df.index}
     for sku in products_in_basket_sku_list:
         basket_contents_lookup[sku] += 1
@@ -202,6 +196,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
