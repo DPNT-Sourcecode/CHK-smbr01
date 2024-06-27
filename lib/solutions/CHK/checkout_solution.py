@@ -72,11 +72,11 @@ basket_discount_tracker = {
 # sorted by BOGOF first (NOTE a python version should be used which retains dictionary order)
 ITEM_PRICE_DISCOUNT_LOOKUP = {
     "E": [40, "2E get one B free"],
-    "F": [10, "2F get one F free"],
-    "N": [40, "3N get one M free"],
-    "R": [50, "3R get one Q free"],
-    "U": [40, "3U get one U free"],
-    "A": [50, "3A for 130, 5A for 200"],
+    # "F": [10, "2F get one F free"],
+    # "N": [40, "3N get one M free"],
+    # "R": [50, "3R get one Q free"],
+    # "U": [40, "3U get one U free"],
+    # "A": [50, "3A for 130, 5A for 200"],
     "B": [30, "2B for 45"],
     "C": [20, ""],
     "D": [15, ""],
@@ -142,8 +142,8 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             # it's a buy one get something free discount
             # e.g. "2E get one B free"
             discount_details = discount_rule.split(" get one ")
-            # add 1, because we need an extra item in the basket for the bogof to trigger
-            number_of_items_required_to_trigger = int(discount_details[0][0]) + 1
+
+            number_of_items_required_to_trigger = int(discount_details[0][0])
             discount_type = 'bogof'
             discount_target_sku = discount_details[1][0]
             discount_per_trigger = ITEM_PRICE_DISCOUNT_LOOKUP[discount_target_sku][0]
@@ -229,6 +229,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
