@@ -123,17 +123,18 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
         discount_rules = list(reversed(discount_rules))
 
     parsed_rules_info = []
-
     for discount_rule in discount_rules:
         if "for" in discount_rule:
             # it's a multibuy discount
             discount_details = discount_rule.split(" for ")
-            number_of_items_required_to_trigger = int(discount_details[0][0])
+            # TODO increase robustness & clarity when splitting these strings
+            number_of_items_required_to_trigger = int(discount_details[0][0])  
             discounted_price = int(discount_details[1])
             potential_full_price = number_of_items_required_to_trigger * original_price_per_unit
             discount_per_trigger = potential_full_price - discounted_price
             discount_type = 'multibuy'
             discount_target_sku = discount_details[0][1]
+            # TODO refactor these parts into a class or other data structure
             parsed_rules_info.append({
                 "type": discount_type,
                 "discount_per_trigger": discount_per_trigger,
@@ -143,6 +144,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
         elif "get one" in discount_rule:
             import pdb;pdb.set_trace()
             # it's a buy one get something free discount
+            # e.g. "2E get one B free"
             discount_details = discount_rule.split(" get one ")
             number_of_items_required_to_trigger = int(discount_details[0][0])
             discounted_price = int(discount_details[1])
@@ -237,12 +239,3 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
-
-
-
-
-
-
-
-
-
