@@ -109,7 +109,8 @@ price_df.columns = ['price', 'discount_rule']
 
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
-        if sku not in ITEM_PRICE_DISCOUNT_LOOKUP:
+        import  pdb;pdb.set_trace()
+        if sku not in price_df:
             return False
     return True
 
@@ -248,6 +249,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
