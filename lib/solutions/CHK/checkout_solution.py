@@ -174,8 +174,7 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
     number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
-    if number_of_discounts_triggered > number_of_this_item_in_basket:
-        import pdb;pdb.set_trace()
+    import  pdb;pdb.set_trace()
     # add it to the target row
     total_discount_for_rule = discount_info['discount_per_trigger'] * number_of_discounts_triggered
     # return remaining items
@@ -217,6 +216,7 @@ def _calculate_total_price(products_in_basket_sku_list):
                 evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
             else:
                 evaluated_discount_details = _bogof_evaluator(basket_contents_lookup, index, row, discount_rule)
+                import pdb;pdb.set_trace()
 
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
@@ -245,6 +245,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
