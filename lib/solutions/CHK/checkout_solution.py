@@ -223,6 +223,8 @@ def _calculate_total_price(products_in_basket_sku_list):
                 import pdb;pdb.set_trace()
 
             # update discount total, and amount of items left for discount
+            if evaluated_discount_details['total_discount']:
+                import pdb;pdb.set_trace()
             discount_accumulated += evaluated_discount_details['total_discount']
             basket_contents_lookup[discount_rule['discount_target_sku']] = evaluated_discount_details['remaining_items_for_future_discounts']
 
@@ -249,6 +251,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
