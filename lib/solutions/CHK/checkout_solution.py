@@ -21,7 +21,7 @@ price_df.sort_values('rule_ranking', ascending=False, inplace=True)
 # TODO compute this automatically in future, especially if list concerned grows considerably
 SKUS_IN_3_FOR_45_OFFER = ['Z', 'S', 'Y', 'T', 'X']
 
-def _is_basket_valid(products_in_basket_sku_list):
+def _is_basket_valid(products_in_basket_sku_list: list) -> bool:
     for sku in products_in_basket_sku_list:
         if sku not in price_df.index:
             return False
@@ -82,7 +82,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
     return parsed_rules_info
 
 
-def _multibuy_evaluator(basket_contents_lookup, index, discount_info):
+def _multibuy_evaluator(basket_contents_lookup: dict, index: int, discount_info: dict) -> dict:
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
@@ -97,7 +97,7 @@ def _multibuy_evaluator(basket_contents_lookup, index, discount_info):
     }
 
 
-def _bogof_evaluator(basket_contents_lookup, index, discount_info):
+def _bogof_evaluator(basket_contents_lookup: dict, index: int, discount_info: dict) -> dict:
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
@@ -113,7 +113,6 @@ def _bogof_evaluator(basket_contents_lookup, index, discount_info):
         if number_in_discount_target_basket < number_of_discounts_triggered:
             number_of_discounts_triggered  = number_in_discount_target_basket
 
-
     # tally up the discount
     total_discount_for_rule = discount_info['discount_per_trigger'] * \
         number_of_discounts_triggered
@@ -123,13 +122,14 @@ def _bogof_evaluator(basket_contents_lookup, index, discount_info):
         'remaining_items_for_future_discounts': number_in_discount_target_basket - number_of_discounts_triggered
     }
 
+
 def _3_for_45_evaluator(basket_contents_lookup: dict) -> int:
     total_discount = 0
     original_price = 0
     count = 0
     temp_basket_contents_lookup = basket_contents_lookup
-    for i, sku in enumerate(SKUS_IN_3_FOR_45_OFFER):
-        for j in range(basket_contents_lookup[sku]):
+    for _, sku in enumerate(SKUS_IN_3_FOR_45_OFFER):
+        for _ in range(basket_contents_lookup[sku]):
             original_price += _get_sku_price(sku)
             count += 1
             temp_basket_contents_lookup[sku] -= 1
@@ -143,7 +143,7 @@ def _3_for_45_evaluator(basket_contents_lookup: dict) -> int:
     return total_discount
 
 
-def _calculate_total_price(products_in_basket_sku_list: list) -> :
+def _calculate_total_price(products_in_basket_sku_list: list) -> int:
     basket_contents_lookup = {sku: 0 for sku in price_df.index}
     for sku in products_in_basket_sku_list:
         basket_contents_lookup[sku] += 1
@@ -182,7 +182,6 @@ def _calculate_total_price(products_in_basket_sku_list: list) -> :
 
 
 def checkout(skus: str) -> int:
-
     if not skus:
         # empty basket, total cost is 0
         return 0
@@ -196,8 +195,3 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
-
-
-
-
-

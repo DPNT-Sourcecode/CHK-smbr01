@@ -181,8 +181,3 @@ class TestChk():
         # ['Z','S','Y','T','X']
         total_price = checkout_solution.checkout("XXX£$%^&*()TTTYYSYSSZ")
         assert total_price == expected_total_price
-
-
-
-
-
