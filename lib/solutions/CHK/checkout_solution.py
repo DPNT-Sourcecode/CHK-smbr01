@@ -206,6 +206,10 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
         'remaining_items_for_future_discounts': number_in_discount_target_basket - number_of_discounts_triggered
     }
 
+def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
+    # accumulate the amount spent on S,T,X,Y,Z collectively
+    pass
+
 
 def _calculate_total_price(products_in_basket_sku_list):
     basket_contents_lookup = {sku: 0 for sku in price_df.index}
@@ -256,6 +260,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
