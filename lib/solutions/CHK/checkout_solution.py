@@ -180,10 +180,15 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
     # calculate total discount
     number_of_discounts_triggered, remainder = divmod(
         number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
-    import pdb;pdb.set_trace()
+
+    number_in_discount_target_basket = basket_contents_lookup[discount_info['discount_target_sku']]
+    
     # If the free product isn't in the basket, we won't award the discount
     if discount_info['discount_target_sku'] == index and number_of_discounts_triggered and not remainder:
         number_of_discounts_triggered -= 1
+    elif number_in_discount_target_basket != index:
+        
+
 
     # tally up the discount
     total_discount_for_rule = discount_info['discount_per_trigger'] * \
@@ -191,7 +196,7 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
 
     return {
         'total_discount': total_discount_for_rule,
-        'remaining_items_for_future_discounts': basket_contents_lookup[discount_info['discount_target_sku']] - number_of_discounts_triggered
+        'remaining_items_for_future_discounts': number_in_discount_target_basket - number_of_discounts_triggered
     }
 
 
@@ -242,12 +247,3 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
-
-
-
-
-
-
-
-
-
