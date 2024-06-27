@@ -70,6 +70,39 @@ basket_discount_tracker = {
     "Z": 0,
 }
 # sorted by BOGOF first (NOTE a python version should be used which retains dictionary order)
+
+ITEM_PRICE_DISCOUNT_LOOKUP = {
++------+-------+---------------------------------+
+| Item | Price | Special offers                  |
++------+-------+---------------------------------+
+| A    | 50    | 3A for 130, 5A for 200          |
+| B    | 30    | 2B for 45                       |
+| C    | 20    |                                 |
+| D    | 15    |                                 |
+| E    | 40    | 2E get one B free               |
+| F    | 10    | 2F get one F free               |
+| G    | 20    |                                 |
+| H    | 10    | 5H for 45, 10H for 80           |
+| I    | 35    |                                 |
+| J    | 60    |                                 |
+| K    | 70    | 2K for 120                      |
+| L    | 90    |                                 |
+| M    | 15    |                                 |
+| N    | 40    | 3N get one M free               |
+| O    | 10    |                                 |
+| P    | 50    | 5P for 200                      |
+| Q    | 30    | 3Q for 80                       |
+| R    | 50    | 3R get one Q free               |
+| S    | 20    | buy any 3 of (S,T,X,Y,Z) for 45 |
+| T    | 20    | buy any 3 of (S,T,X,Y,Z) for 45 |
+| U    | 40    | 3U get one U free               |
+| V    | 50    | 2V for 90, 3V for 130           |
+| W    | 20    |                                 |
+| X    | 17    | buy any 3 of (S,T,X,Y,Z) for 45 |
+| Y    | 20    | buy any 3 of (S,T,X,Y,Z) for 45 |
+| Z    | 21    | buy any 3 of (S,T,X,Y,Z) for 45 |
++------+-------+---------------------------------+
+}
 ITEM_PRICE_DISCOUNT_LOOKUP = {
     "E": [40, "2E get one B free"],
     "F": [10, "2F get one F free"],
@@ -90,13 +123,13 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
     "O": [10, ""],
     "P": [50, "5P for 200"],
     "Q": [30, "3Q for 80"],
-    "S": [30, ""],
-    "T": [20, ""],
+    "S": [30, "buy any 3 of (S,T,X,Y,Z) for 45"],
+    "T": [20, "buy any 3 of (S,T,X,Y,Z) for 45"],
     "V": [50, "2V for 90, 3V for 130"],
     "W": [20, ""],
-    "X": [90, ""],
-    "Y": [10, ""],
-    "Z": [50, ""],
+    "X": [90, "buy any 3 of (S,T,X,Y,Z) for 45"],
+    "Y": [10, "buy any 3 of (S,T,X,Y,Z) for 45"],
+    "Z": [50, "buy any 3 of (S,T,X,Y,Z) for 45"],
 }
 
 # set up dataframe for item price tabular data
@@ -246,6 +279,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
