@@ -140,7 +140,21 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
                 "number_of_items_required_to_trigger": number_of_items_required_to_trigger,
                 "discount_target_sku": discount_target_sku
             })
-
+        elif "get one" in discount_rule:
+            # it's a buy one get something free discount
+            discount_details = discount_rule.split(" for ")
+            number_of_items_required_to_trigger = int(discount_details[0][0])
+            discounted_price = int(discount_details[1])
+            potential_full_price = number_of_items_required_to_trigger * original_price_per_unit
+            discount_per_trigger = potential_full_price - discounted_price
+            discount_type = 'multibuy'
+            discount_target_sku = discount_details[0][1]
+            parsed_rules_info.append({
+                "type": discount_type,
+                "discount_per_trigger": discount_per_trigger,
+                "number_of_items_required_to_trigger": number_of_items_required_to_trigger,
+                "discount_target_sku": discount_target_sku
+            })
     return parsed_rules_info
 
 
@@ -189,8 +203,12 @@ def _calculate_total_price(products_in_basket_sku_list):
     for index, row in price_df[:1].iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
-            import pdb;pdb.set_trace()
-            evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
+
+            if discount_rule['type'] is 'multibuy':
+                evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
+            else:
+                import  pdb;pdb.set_trace()
+
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
             basket_contents_lookup[index] = evaluated_discount_details['remaining_items_for_future_discounts']
@@ -218,6 +236,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
