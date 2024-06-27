@@ -172,8 +172,17 @@ def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
     number_of_this_item_in_basket = basket_contents_lookup[index]
     number_of_discounts_triggered, remainder = divmod(
         number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
+    
+    if number_of_discounts_triggered:
+        # remove the highest priced item in the range
+        for sku in SKUS_IN_3_FOR_45_OFFER:
+            
+
     # enough for a discount?
-    import pdb;pdb.set_trace()
+    if index == 'S':
+        import pdb;pdb.set_trace()
+    
+
 
     pass
 
@@ -228,4 +237,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
