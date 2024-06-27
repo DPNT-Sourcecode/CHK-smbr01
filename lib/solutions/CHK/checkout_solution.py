@@ -74,32 +74,30 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
     "E": [40, "2E get one B free"],
     "F": [10, "2F get one F free"],
     "N": [40, "3N get one M free"],
-    "A": [50, "3A for 130, 5A for 200"],
     "R": [50, "3R get one Q free"],
     "U": [40, "3U get one U free"],
+    "A": [50, "3A for 130, 5A for 200"],
     "B": [30, "2B for 45"],
     "C": [20, ""],
-    "D": [15, ""]
-    # "G": [20, ""]
-    # "H": [10, "5H for 45, 10H for 80"],
-    # "I": [35, ""]
-    # "J": [60, ""]
-    # "K": [80, "2K for 150"],
-    # "L": [90, ""]
-    # "M": [15, ""]
-    # "O": [10, ""]
-    # "P": [50, "5P for 200"], 
-    # "Q": [30, "3Q for 80"],
-    # "S": [30, ""]
-    # "T": [20, ""]
-    # "V": [50, "2V for 90, 3V for 130"],
-    # "W": [20, ""]
-    # "X": [90, ""]
-    # "Y": [10, ""]
-    # "Z": [50, ""]
+    "D": [15, ""],
+    "G": [20, ""],
+    "H": [10, "5H for 45, 10H for 80"],
+    "I": [35, ""],
+    "J": [60, ""],
+    "K": [80, "2K for 150"],
+    "L": [90, ""],
+    "M": [15, ""],
+    "O": [10, ""],
+    "P": [50, "5P for 200"], 
+    "Q": [30, "3Q for 80"],
+    "S": [30, ""],
+    "T": [20, ""],
+    "V": [50, "2V for 90, 3V for 130"],
+    "W": [20, ""],
+    "X": [90, ""],
+    "Y": [10, ""],
+    "Z": [50, ""],
 }
-
-# PRICE_LIST = ITEM_PRICE_DISCOUNT_LOOKUP.keys()
 
 # set up dataframe for item price tabular data
 price_df = pd.DataFrame.from_dict(ITEM_PRICE_DISCOUNT_LOOKUP, orient='index')
@@ -154,7 +152,6 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
                 "number_of_items_required_to_trigger": number_of_items_required_to_trigger,
                 "discount_target_sku": discount_target_sku
             })
-
 
     return parsed_rules_info
 
@@ -211,7 +208,6 @@ def _calculate_total_price(products_in_basket_sku_list):
     discount_accumulated = 0
 
     # manage discounts
-    # TODO invert this to loop through basket items only
     for index, row in price_df.iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
@@ -219,11 +215,8 @@ def _calculate_total_price(products_in_basket_sku_list):
                 evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
             else:
                 evaluated_discount_details = _bogof_evaluator(basket_contents_lookup, index, row, discount_rule)
-                import pdb;pdb.set_trace()
 
             # update discount total, and amount of items left for discount
-            if evaluated_discount_details['total_discount']:
-                import pdb;pdb.set_trace()
             discount_accumulated += evaluated_discount_details['total_discount']
             basket_contents_lookup[discount_rule['discount_target_sku']] = evaluated_discount_details['remaining_items_for_future_discounts']
 
@@ -250,4 +243,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
