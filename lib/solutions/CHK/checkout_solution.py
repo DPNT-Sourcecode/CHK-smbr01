@@ -141,13 +141,14 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
                 "discount_target_sku": discount_target_sku
             })
         elif "get one" in discount_rule:
+            import pdb;pdb.set_trace()
             # it's a buy one get something free discount
-            discount_details = discount_rule.split(" for ")
+            discount_details = discount_rule.split(" get one ")
             number_of_items_required_to_trigger = int(discount_details[0][0])
             discounted_price = int(discount_details[1])
             potential_full_price = number_of_items_required_to_trigger * original_price_per_unit
             discount_per_trigger = potential_full_price - discounted_price
-            discount_type = 'multibuy'
+            discount_type = 'bogof'
             discount_target_sku = discount_details[0][1]
             parsed_rules_info.append({
                 "type": discount_type,
@@ -199,8 +200,8 @@ def _calculate_total_price(products_in_basket_sku_list):
     discount_accumulated = 0
 
     # manage discounts
-    # for index, row in price_df.iterrows():
-    for index, row in price_df[:1].iterrows():
+    for index, row in price_df.iterrows():
+    # for index, row in price_df[:1].iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
 
@@ -236,6 +237,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
