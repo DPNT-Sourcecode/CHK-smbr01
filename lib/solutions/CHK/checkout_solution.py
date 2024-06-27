@@ -142,8 +142,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             # it's a buy one get something free discount
             # e.g. "2E get one B free"
             discount_details = discount_rule.split(" get one ")
-
-            number_of_items_required_to_trigger = int(discount_details[0][0]) + 1
+            number_of_items_required_to_trigger = int(discount_details[0][0])
             discount_type = 'bogof'
             discount_target_sku = discount_details[1][0]
             discount_per_trigger = ITEM_PRICE_DISCOUNT_LOOKUP[discount_target_sku][0]
@@ -175,6 +174,10 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
     number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
+
+    if basket_contents_lookup[discount_info['discount_target_sku']] < number_of_discounts_triggered:
+        import pdb;pdb.set_trace()
+
     # add it to the target row
     total_discount_for_rule = discount_info['discount_per_trigger'] * number_of_discounts_triggered
     # return remaining items
@@ -229,4 +232,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
