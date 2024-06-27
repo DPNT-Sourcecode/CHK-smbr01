@@ -142,6 +142,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             # it's a buy one get something free discount
             # e.g. "2E get one B free"
             discount_details = discount_rule.split(" get one ")
+            # add 1, because we need an extra item in the basket for the bogof to trigger
             number_of_items_required_to_trigger = int(discount_details[0][0])
             discount_type = 'bogof'
             discount_target_sku = discount_details[1][0]
@@ -174,7 +175,6 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
     number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
-    import  pdb;pdb.set_trace()
     # add it to the target row
     total_discount_for_rule = discount_info['discount_per_trigger'] * number_of_discounts_triggered
     # return remaining items
@@ -188,21 +188,6 @@ def _calculate_total_price(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
         basket_contents_lookup[sku] += 1
 
-    # check special offers
-    # number_of_5a_discounts, a_remainder = divmod(basket_contents_lookup['A'], 5)
-    # number_of_3a_discounts = int(a_remainder / 3)
-    # potential_number_of_free_b_products = int(basket_contents_lookup['E'] / 2)
-
-    # temp_b_count = basket_contents_lookup['B']
-    # temp_b_count -= potential_number_of_free_b_products
-
-    # if temp_b_count < 0:
-    #     potential_number_of_free_b_products = 0
-
-    # number_of_b_discounts = int(temp_b_count / 2)
-
-    # number_of_f_free = int(basket_contents_lookup['F'] / 3)
-    # import pdb;pdb.set_trace()
     basket_sub_total = sum([ITEM_PRICE_DISCOUNT_LOOKUP[sku][0]
                            for sku in products_in_basket_sku_list])
 
@@ -216,7 +201,6 @@ def _calculate_total_price(products_in_basket_sku_list):
                 evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
             else:
                 evaluated_discount_details = _bogof_evaluator(basket_contents_lookup, index, row, discount_rule)
-                import pdb;pdb.set_trace()
 
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
@@ -245,6 +229,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
