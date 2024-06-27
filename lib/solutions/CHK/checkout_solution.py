@@ -187,8 +187,8 @@ def _3_for_45_evaluator(basket_contents_lookup, total_discount=0, start_point=0,
                 discount = original_price - 45
                 total_discount += discount
                 start_point = j + 1
-                import pdb;pdb.set_trace()
                 _3_for_45_evaluator(basket_contents_lookup, total_discount=total_discount, start_point=start_point, sku_list=sku_list[i:])
+    return total_discount
                 # import pdb;pdb.set_trace()
         # original_price += _get_sku_price(sku)
         # count += 
@@ -266,8 +266,9 @@ def _calculate_total_price(products_in_basket_sku_list):
                                    ] = evaluated_discount_details['remaining_items_for_future_discounts']
 
     # TODO experiment with having this at the start or end
-    _3_for_45_evaluator(basket_contents_lookup)
-
+    discount_3_for_45 = _3_for_45_evaluator(basket_contents_lookup)
+    discount_accumulated += discount_3_for_45
+    
     basket_total_post_discounts = basket_sub_total - discount_accumulated
 
     return basket_total_post_discounts
@@ -288,12 +289,3 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
-
-
-
-
-
-
-
-
-
