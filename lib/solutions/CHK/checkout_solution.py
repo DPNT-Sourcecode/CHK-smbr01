@@ -170,17 +170,15 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
         'remaining_items_for_future_discounts': number_in_discount_target_basket - number_of_discounts_triggered
     }
 
-def _3_for_45_evaluator(basket_contents_lookup, total_discount=0, start_point=0, sku_list=SKUS_IN_3_FOR_45_OFFER):
-    # total_number_of_eligible_items_in_basket = 0
+def _3_for_45_evaluator(basket_contents_lookup):
 
     original_price = 0
     count = 0
-    # total_discount = 0
-    # start_point = 0
+    total_discount = 0
+
     temp_basket_contents_lookup = basket_contents_lookup
-    for i, sku in enumerate(sku_list):
-        for j in range(start_point, basket_contents_lookup[sku]):
-            # print(i)
+    for i, sku in enumerate(SKUS_IN_3_FOR_45_OFFER):
+        for j in range(basket_contents_lookup[sku]):
             original_price += _get_sku_price(sku)
             count += 1
             temp_basket_contents_lookup[sku] -= 1
@@ -188,10 +186,7 @@ def _3_for_45_evaluator(basket_contents_lookup, total_discount=0, start_point=0,
                 # calc discount
                 discount = original_price - 45
                 total_discount += discount
-                start_point = j + 1
-                start_point = j + 1
-                # sku_start_point = i if 
-                _3_for_45_evaluator(basket_contents_lookup=temp_basket_contents_lookup, total_discount=total_discount, start_point=start_point, sku_list=sku_list[i:])
+
     return total_discount
                 # import pdb;pdb.set_trace()
         # original_price += _get_sku_price(sku)
@@ -293,3 +288,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
