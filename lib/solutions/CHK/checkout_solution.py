@@ -220,9 +220,17 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
         'remaining_items_for_future_discounts': number_in_discount_target_basket - number_of_discounts_triggered
     }
 
+# TODO compute this automatically in future
+skus_with_offer = ['S,T,X,Y,Z']
+
 def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
     # accumulate the amount spent on S,T,X,Y,Z collectively
-    
+
+
+    basket_contents_lookup['S']
+    # enough for a discount?
+    import pdb;pdb.set_trace()
+
     pass
 
 
@@ -241,6 +249,7 @@ def _calculate_total_price(products_in_basket_sku_list):
         discount_rules_info = _discount_parser(
             row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
+            # TODO define a proper interface for these
             if discount_rule['type'] == 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(
                     basket_contents_lookup, index, row, discount_rule)
@@ -275,12 +284,3 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
-
-
-
-
-
-
-
-
-
