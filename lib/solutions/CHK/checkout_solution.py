@@ -126,9 +126,9 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             # it's the 3 for 45 deal
             parsed_rules_info.append({
                 "type": '3for45',
-                "discount_per_trigger": 0,
-                "number_of_items_required_to_trigger": number_of_items_required_to_trigger,
-                "discount_target_sku": discount_target_sku
+                "discount_per_trigger": None,
+                "number_of_items_required_to_trigger": 3,
+                "discount_target_sku": None
             })
         elif "for" in discount_rule:
             # it's a multibuy discount
@@ -225,10 +225,12 @@ def _calculate_total_price(products_in_basket_sku_list):
             if discount_rule['type'] == 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(
                     basket_contents_lookup, index, row, discount_rule)
-            else:
+            elif discount_rule['type'] == "bogof":
                 evaluated_discount_details = _bogof_evaluator(
                     basket_contents_lookup, index, row, discount_rule)
-
+            elif discount_rule['type'] == "3for45":
+                evaluated_discount_details = _3_for_45_evaluator(
+                    basket_contents_lookup, index, row, discount_rule)
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
             basket_contents_lookup[discount_rule['discount_target_sku']
@@ -254,6 +256,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
