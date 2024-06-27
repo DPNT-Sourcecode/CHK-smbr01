@@ -170,14 +170,14 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
         'remaining_items_for_future_discounts': number_in_discount_target_basket - number_of_discounts_triggered
     }
 
-def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
+def _3_for_45_evaluator(basket_contents_lookup, start_point=0, sku_list=SKUS_IN_3_FOR_45_OFFER):
     total_number_of_eligible_items_in_basket = 0
 
     original_price = 0
     count = 0
     total_discount = 0
-    start_point =  0
-    for sku in SKUS_IN_3_FOR_45_OFFER:
+    start_point = 0
+    for sku in sku_list:
         for i in range(start_point, basket_contents_lookup[sku]):
             print(i)
             original_price += _get_sku_price(sku)
@@ -228,12 +228,11 @@ def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
 
 
     # enough for a discount?
-    if index == 'S':
-        import pdb;pdb.set_trace()
+    # if index == 'S':
+    #     import pdb;pdb.set_trace()
     
 
 
-    pass
 
 
 def _calculate_total_price(products_in_basket_sku_list):
@@ -266,12 +265,7 @@ def _calculate_total_price(products_in_basket_sku_list):
                                    ] = evaluated_discount_details['remaining_items_for_future_discounts']
 
     # TODO experiment with having this at the start or end
-    _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info={
-                "type": '3for45',
-                "discount_per_trigger": None,
-                "number_of_items_required_to_trigger": 3,
-                "discount_target_sku": None
-            })
+    _3_for_45_evaluator(basket_contents_lookup)
 
     basket_total_post_discounts = basket_sub_total - discount_accumulated
 
@@ -293,6 +287,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
