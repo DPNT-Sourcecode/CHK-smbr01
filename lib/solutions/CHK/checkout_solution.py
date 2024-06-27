@@ -146,6 +146,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             number_of_items_required_to_trigger = int(discount_details[0][0])
             discount_type = 'bogof'
             discount_target_sku = discount_details[1][0]
+            import pdb;pdb.set_trace()
             discount_per_trigger = ITEM_PRICE_DISCOUNT_LOOKUP[discount_target_sku][0]
             parsed_rules_info.append({
                 "type": discount_type,
@@ -203,8 +204,8 @@ def _calculate_total_price(products_in_basket_sku_list):
     basket_contents_lookup = {sku: 0 for sku in price_df.index}
     for sku in products_in_basket_sku_list:
         basket_contents_lookup[sku] += 1
-    import pdb;pdb.set_trace()
-    basket_sub_total = sum([price_df[f"{sku}:{sku}"][0]
+
+    basket_sub_total = sum([price_df[sku:sku]['price']
                            for sku in products_in_basket_sku_list])
 
     discount_accumulated = 0
@@ -246,6 +247,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
