@@ -11,13 +11,15 @@ SKUS_IN_3_FOR_45_OFFER = ['Z', 'S', 'Y', 'T', 'X']
 # it doesn't change very often, would save re-building at runtime
 price_df = pd.read_csv('lib/solutions/CHK/item_price.csv', sep="|")
 price_df.columns = price_df.columns.str.strip()
-price_df = price_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
+price_df = price_df.apply(lambda x: x.str.strip()
+                          if x.dtype == "object" else x)
 price_df.set_index('Item', inplace=True)
 price_df.columns = ['price', 'discount_rule']
 price_df['rule_ranking'] = 0
 
 # top-ranking rule == 1
-price_df = price_df.assign(rule_ranking=[1 if " get one " in x else 0 for x in price_df['discount_rule']])
+price_df = price_df.assign(
+    rule_ranking=[1 if " get one " in x else 0 for x in price_df['discount_rule']])
 # Sort the discount rules by their ranking
 price_df.sort_values('rule_ranking', ascending=False, inplace=True)
 
@@ -51,7 +53,8 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             # it's a multibuy discount
             discount_details = discount_rule.split(" for ")
             # TODO increase robustness & clarity when splitting these strings
-            number_of_items_required_to_trigger = int(discount_details[0][0:-1])
+            number_of_items_required_to_trigger = int(
+                discount_details[0][0:-1])
             discounted_price = int(discount_details[1])
             potential_full_price = number_of_items_required_to_trigger * original_price_per_unit
             discount_per_trigger = potential_full_price - discounted_price
@@ -82,11 +85,13 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
     return parsed_rules_info
 
 
+# TODO define a proper interface for these
 def _multibuy_evaluator(basket_contents_lookup: dict, index: int, discount_info: dict) -> dict:
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
-    number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
+    number_of_discounts_triggered, remainder = divmod(
+        number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
     # add it to the target row
     total_discount_for_rule = discount_info['discount_per_trigger'] * \
         number_of_discounts_triggered
@@ -97,6 +102,7 @@ def _multibuy_evaluator(basket_contents_lookup: dict, index: int, discount_info:
     }
 
 
+# TODO define a proper interface for these
 def _bogof_evaluator(basket_contents_lookup: dict, index: int, discount_info: dict) -> dict:
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
@@ -111,7 +117,7 @@ def _bogof_evaluator(basket_contents_lookup: dict, index: int, discount_info: di
         number_of_discounts_triggered -= 1
     elif number_in_discount_target_basket != index:
         if number_in_discount_target_basket < number_of_discounts_triggered:
-            number_of_discounts_triggered  = number_in_discount_target_basket
+            number_of_discounts_triggered = number_in_discount_target_basket
 
     # tally up the discount
     total_discount_for_rule = discount_info['discount_per_trigger'] * \
@@ -160,9 +166,9 @@ def _calculate_total_price(products_in_basket_sku_list: list) -> int:
         discount_rules_info = _discount_parser(
             row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
-            # import pdb;pdb.set_trace()
-            # TODO define a proper interface for these
+            # used to ensure we have relevant items for this rule, before we waste time evaluating
             discount_target_item_held = basket_contents_lookup[discount_rule['discount_target_sku']]
+
             if discount_target_item_held and discount_rule['type'] == 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(
                     basket_contents_lookup, index, discount_rule)
@@ -199,6 +205,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
