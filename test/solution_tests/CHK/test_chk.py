@@ -175,12 +175,13 @@ class TestChk():
         # ['Z','S','Y','T','X']
         total_price = checkout_solution.checkout("XXXTTTYYSYSSZ")
         assert total_price == expected_total_price
-    
-    def test_3_for_45_mixed_2(self):
-        expected_total_price = 45+45+45+45+17
+
+    def test_3_for_45_mixed_2_invalid_chars(self):
+        expected_total_price = -1
         # ['Z','S','Y','T','X']
         total_price = checkout_solution.checkout("XXX£$%^&*()TTTYYSYSSZ")
         assert total_price == expected_total_price
+
 
 
 
