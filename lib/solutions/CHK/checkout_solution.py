@@ -1,48 +1,10 @@
-from dataclasses import dataclass
-import pandas as pd
 # noinspection PyUnusedLocal
 # skus = unicode string
-
-# TODO
-# total price of a number of items
-# things are identified using Stock Keeping Units, or SKUs
-# some items are multi-priced: buy n of them, and they'll cost you y pounds
-
-# Our price table and offers:
-# +------+-------+------------------------+
-# | Item | Price | Special offers         |
-# +------+-------+------------------------+
-# | A    | 50    | 3A for 130, 5A for 200 |
-# | B    | 30    | 2B for 45              |
-# | C    | 20    |                        |
-# | D    | 15    |                        |
-# | E    | 40    | 2E get one B free      |
-# | F    | 10    | 2F get one F free      |
-# | G    | 20    |                        | <---- new starting here
-# | H    | 10    | 5H for 45, 10H for 80  |
-# | I    | 35    |                        |
-# | J    | 60    |                        |
-# | K    | 80    | 2K for 150             |
-# | L    | 90    |                        |
-# | M    | 15    |                        |
-# | N    | 40    | 3N get one M free      |
-# | O    | 10    |                        |
-# | P    | 50    | 5P for 200             |
-# | Q    | 30    | 3Q for 80              |
-# | R    | 50    | 3R get one Q free      |
-# | S    | 30    |                        |
-# | T    | 20    |                        |
-# | U    | 40    | 3U get one U free      |
-# | V    | 50    | 2V for 90, 3V for 130  |
-# | W    | 20    |                        |
-# | X    | 90    |                        |
-# | Y    | 10    |                        |
-# | Z    | 50    |                        |
-# +------+-------+------------------------+
-
+import pandas as pd
 
 # set up dataframe for item price tabular data
-# TODO save this dataframe to disk for efficiency, it doesn't change very often
+# TODO save this dataframe to disk for efficiency in future, it doesn't change very often
+# would save re-building at runtime
 price_df = pd.read_csv('lib/solutions/CHK/item_price.csv', sep="|")
 price_df.columns = price_df.columns.str.strip()
 price_df = price_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
@@ -129,7 +91,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
     return parsed_rules_info
 
 
-def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
+def _multibuy_evaluator(basket_contents_lookup, index, discount_info):
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
@@ -144,7 +106,7 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     }
 
 
-def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
+def _bogof_evaluator(basket_contents_lookup, index, discount_info):
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
@@ -170,8 +132,7 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
         'remaining_items_for_future_discounts': number_in_discount_target_basket - number_of_discounts_triggered
     }
 
-def _3_for_45_evaluator(basket_contents_lookup):
-
+def _3_for_45_evaluator(basket_contents_lookup: dict) -> int:
     total_discount = 0
     original_price = 0
     count = 0
@@ -189,51 +150,6 @@ def _3_for_45_evaluator(basket_contents_lookup):
                 count = 0
 
     return total_discount
-                # import pdb;pdb.set_trace()
-        # original_price += _get_sku_price(sku)
-        # count += 
-        # if count == 3:
-        #     # calc discount
-        #     discount = original_price - 45
-            # reset counters
-            
-            # remove items
-        # discount_triggered
-
-        # total_number_of_eligible_items_in_basket += basket_contents_lookup[sku]
-
-    # number_of_discounts_triggered, remainder = divmod(
-        # total_number_of_eligible_items_in_basket, discount_info['number_of_items_required_to_trigger'])
-
-    # for i
-
-
-    # number_of_this_item_in_basket = basket_contents_lookup[index]
-    # number_of_discounts_triggered, remainder = divmod(
-    #     number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
-    
-    # total_discount_for_rule = 0
-
-    # import pdb;pdb.set_trace()
-    # if number_of_discounts_triggered:
-    #     # remove the highest priced item in the range
-    #     # TODO test when sku==index
-    #     for sku in SKUS_IN_3_FOR_45_OFFER:
-    #         if basket_contents_lookup[sku]:
-
-    #             import pdb;pdb.set_trace()
-                # discount here
-                # total_discount_for_rule += _get_sku_price(sku)
-                # remove item
-                # basket_contents_lookup[sku] -= 1
-
-
-    # enough for a discount?
-    # if index == 'S':
-    #     import pdb;pdb.set_trace()
-    
-
-
 
 
 def _calculate_total_price(products_in_basket_sku_list):
@@ -254,18 +170,18 @@ def _calculate_total_price(products_in_basket_sku_list):
             # TODO define a proper interface for these
             if discount_rule['type'] == 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(
-                    basket_contents_lookup, index, row, discount_rule)
+                    basket_contents_lookup, index, discount_rule)
             elif discount_rule['type'] == "bogof":
                 evaluated_discount_details = _bogof_evaluator(
-                    basket_contents_lookup, index, row, discount_rule)
+                    basket_contents_lookup, index, discount_rule)
             else:
                 continue
+
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
             basket_contents_lookup[discount_rule['discount_target_sku']
                                    ] = evaluated_discount_details['remaining_items_for_future_discounts']
 
-    # TODO experiment with having this at the start or end
     discount_3_for_45 = _3_for_45_evaluator(basket_contents_lookup)
     discount_accumulated += discount_3_for_45
 
@@ -289,5 +205,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
