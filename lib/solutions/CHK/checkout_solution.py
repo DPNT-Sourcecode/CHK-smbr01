@@ -56,9 +56,14 @@ price_df = price_df.assign(rule_ranking=[2 if " get one " in x else 0 for x in p
 price_df.sort_values('rule_ranking', ascending=False, inplace=True)
 
 # TODO compute this automatically in future
-SKUS_IN_3_FOR_45_OFFER = ['S,T,X,Y,Z']
+SKUS_IN_3_FOR_45_OFFER = ['Z,S,Y,T,X']
+# | Z    | 21 
+# | S    | 20  
+# | Y    | 20 
+# | T    | 20 
+# | X    | 17 
 
-# TODO check if this interferes with the last rule
+# TODO check if this interferes with the last rule, could do and not "buy any" to differentiate them
 # price_df = price_df.assign(rule_type=[1 if " for " in x else 0 for x in price_df['discount_rule']])
 # import pdb;pdb.set_trace()
 
@@ -176,7 +181,7 @@ def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
     if number_of_discounts_triggered:
         # remove the highest priced item in the range
         for sku in SKUS_IN_3_FOR_45_OFFER:
-            
+
 
     # enough for a discount?
     if index == 'S':
@@ -237,5 +242,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
