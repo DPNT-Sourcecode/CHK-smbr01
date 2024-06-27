@@ -166,7 +166,7 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     total_discount_for_rule = discount_info['discount_per_trigger'] * \
         number_of_discounts_triggered
 
-    # import pdb;pdb.set_trace()
+    import pdb;pdb.set_trace()
     return {
         'total_discount': total_discount_for_rule,
         'remaining_items_for_future_discounts': remainder
@@ -224,6 +224,7 @@ def _calculate_total_price(products_in_basket_sku_list):
 
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
+            import pdb;pdb.set_trace()
             basket_contents_lookup[discount_rule['discount_target_sku']
                                    ] = evaluated_discount_details['remaining_items_for_future_discounts']
 
@@ -247,5 +248,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
