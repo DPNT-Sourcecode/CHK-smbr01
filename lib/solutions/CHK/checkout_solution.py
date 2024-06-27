@@ -100,7 +100,6 @@ basket_discount_tracker = {
 # }
 
 # set up dataframe for item price tabular data
-# price_df = pd.DataFrame.from_csv("lib/solutions/CHK/item_price.csv", orient='index')
 price_df=pd.read_csv('lib/solutions/CHK/item_price.csv', sep="|")
 price_df.columns = price_df.columns.str.strip()
 price_df = price_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
@@ -201,10 +200,10 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
 
 
 def _calculate_total_price(products_in_basket_sku_list):
-    basket_contents_lookup = {sku: 0 for sku in ITEM_PRICE_DISCOUNT_LOOKUP}
+    basket_contents_lookup = {sku: 0 for sku in price_df.index}
     for sku in products_in_basket_sku_list:
         basket_contents_lookup[sku] += 1
-
+    import pdb;pdb.set_trace()
     basket_sub_total = sum([ITEM_PRICE_DISCOUNT_LOOKUP[sku][0]
                            for sku in products_in_basket_sku_list])
 
@@ -247,4 +246,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
