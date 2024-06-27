@@ -126,7 +126,10 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             # it's a multibuy discount
             discount_details = discount_rule.split(" for ")
             # TODO increase robustness & clarity when splitting these strings
-            number_of_items_required_to_trigger = int(discount_details[0][0:-1])
+            try:
+                number_of_items_required_to_trigger = int(discount_details[0][0:-1])
+            except: 
+                import pdb;pdb.set_trace()
             discounted_price = int(discount_details[1])
             potential_full_price = number_of_items_required_to_trigger * original_price_per_unit
             discount_per_trigger = potential_full_price - discounted_price
@@ -146,8 +149,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             number_of_items_required_to_trigger = int(discount_details[0][0])
             discount_type = 'bogof'
             discount_target_sku = discount_details[1][0]
-            import pdb;pdb.set_trace()
-            discount_per_trigger = ITEM_PRICE_DISCOUNT_LOOKUP[discount_target_sku][0]
+            discount_per_trigger = price_df[discount_target_sku:discount_target_sku]['price']
             parsed_rules_info.append({
                 "type": discount_type,
                 "discount_per_trigger": discount_per_trigger,
@@ -247,6 +249,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
