@@ -177,18 +177,18 @@ def _3_for_45_evaluator(basket_contents_lookup, total_discount=0, start_point=0,
     count = 0
     # total_discount = 0
     # start_point = 0
-    for sku in sku_list:
-        for i in range(start_point, basket_contents_lookup[sku]):
-            print(i)
+    for i, sku in enumerate(sku_list):
+        for j in range(start_point, basket_contents_lookup[sku]):
+            # print(i)
             original_price += _get_sku_price(sku)
             count += 1
             if count == 3:
                 # calc discount
                 discount = original_price - 45
                 total_discount += discount
-                start_point = i + 1
-                _3_for_45_evaluator(basket_contents_lookup, total_discount=0, start_point=0, sku_list=SKUS_IN_3_FOR_45_OFFER)
+                start_point = j + 1
                 import pdb;pdb.set_trace()
+                _3_for_45_evaluator(basket_contents_lookup, total_discount=total_discount, start_point=start_point, sku_list=sku_list[i:])
                 # import pdb;pdb.set_trace()
         # original_price += _get_sku_price(sku)
         # count += 
@@ -288,6 +288,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
