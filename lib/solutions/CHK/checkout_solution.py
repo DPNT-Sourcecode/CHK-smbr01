@@ -155,7 +155,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
                 "number_of_items_required_to_trigger": number_of_items_required_to_trigger,
                 "discount_target_sku": discount_target_sku
             })
-            import pdb;pdb.set_trace()
+
 
     return parsed_rules_info
 
@@ -173,6 +173,7 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
         'remaining_items_for_future_discounts': remainder
     }
 
+def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
 
 
 def _calculate_total_price(products_in_basket_sku_list):
@@ -209,7 +210,8 @@ def _calculate_total_price(products_in_basket_sku_list):
             if discount_rule['type'] is 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
             else:
-                import  pdb;pdb.set_trace()
+                import pdb;pdb.set_trace()
+                evaluated_discount_details = _bogof_evaluator(basket_contents_lookup, index, row, discount_rule)
 
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
@@ -238,5 +240,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
