@@ -177,7 +177,9 @@ def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
         original_price = 0
         count = 0
         original_price += _get_sku_price(sku)
-        discount_triggered = 
+        count += basket_contents_lookup[sku]
+        import pdb;pdb.set_trace()
+        # discount_triggered
 
         # total_number_of_eligible_items_in_basket += basket_contents_lookup[sku]
 
@@ -273,3 +275,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
