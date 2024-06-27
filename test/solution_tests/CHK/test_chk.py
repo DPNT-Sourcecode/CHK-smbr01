@@ -152,4 +152,10 @@ class TestChk():
         expected_total_price = 90
         total_price = checkout_solution.checkout("ZZZZZZ")
         assert total_price == expected_total_price
+    
+    def test_zzzzzzz(self):
+        expected_total_price = 111
+        total_price = checkout_solution.checkout("ZZZZZZZ")
+        assert total_price == expected_total_price
+
 
