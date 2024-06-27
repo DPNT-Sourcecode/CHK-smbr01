@@ -106,6 +106,7 @@ price_df = price_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
 price_df.set_index('Item', inplace=True)
 price_df.columns = ['price', 'discount_rule']
 price_df['rule_type'] = 0
+import pdb;pdb.set_trace()
 
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
@@ -264,6 +265,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
