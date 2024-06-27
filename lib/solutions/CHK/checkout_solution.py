@@ -234,13 +234,20 @@ def _calculate_total_price(products_in_basket_sku_list):
             elif discount_rule['type'] == "bogof":
                 evaluated_discount_details = _bogof_evaluator(
                     basket_contents_lookup, index, row, discount_rule)
+            else:
+                continue
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
             basket_contents_lookup[discount_rule['discount_target_sku']
                                    ] = evaluated_discount_details['remaining_items_for_future_discounts']
 
     # TODO experiment with having this at the start or end
-    _3_for_45_evaluator(basket_contents_lookup, index, row, discount_rule)
+    _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info={
+                "type": '3for45',
+                "discount_per_trigger": None,
+                "number_of_items_required_to_trigger": 3,
+                "discount_target_sku": None
+            })
 
     basket_total_post_discounts = basket_sub_total - discount_accumulated
 
@@ -262,6 +269,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
