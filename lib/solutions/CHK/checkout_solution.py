@@ -2,9 +2,13 @@
 # skus = unicode string
 import pandas as pd
 
+# Sorted by highest value to give the user the best value discount
+# TODO compute this automatically in future, especially if list concerned grows considerably
+SKUS_IN_3_FOR_45_OFFER = ['Z', 'S', 'Y', 'T', 'X']
+
 # set up dataframe for item price tabular data
 # TODO save this dataframe to disk (or database) for efficiency in future;
-# it doesn't change very often would save re-building at runtime
+# it doesn't change very often, would save re-building at runtime
 price_df = pd.read_csv('lib/solutions/CHK/item_price.csv', sep="|")
 price_df.columns = price_df.columns.str.strip()
 price_df = price_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
@@ -17,9 +21,6 @@ price_df = price_df.assign(rule_ranking=[1 if " get one " in x else 0 for x in p
 # Sort the discount rules by their ranking
 price_df.sort_values('rule_ranking', ascending=False, inplace=True)
 
-# Sorted by highest value to give the user the best value discount
-# TODO compute this automatically in future, especially if list concerned grows considerably
-SKUS_IN_3_FOR_45_OFFER = ['Z', 'S', 'Y', 'T', 'X']
 
 def _is_basket_valid(products_in_basket_sku_list: list) -> bool:
     for sku in products_in_basket_sku_list:
@@ -127,7 +128,8 @@ def _3_for_45_evaluator(basket_contents_lookup: dict) -> int:
     original_price = 0
     count = 0
     temp_basket_contents_lookup = basket_contents_lookup
-    # TODO efficiency could be increased here
+    # TODO efficiency could be increased here in future,
+    # especially if 3 for 45 eligible product list grows a lot
     for _, sku in enumerate(SKUS_IN_3_FOR_45_OFFER):
         for _ in range(basket_contents_lookup[sku]):
             original_price += _get_sku_price(sku)
@@ -158,6 +160,7 @@ def _calculate_total_price(products_in_basket_sku_list: list) -> int:
         discount_rules_info = _discount_parser(
             row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
+            import pdb;pdb.set_trace()
             # TODO define a proper interface for these
             if discount_rule['type'] == 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(
@@ -195,4 +198,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
