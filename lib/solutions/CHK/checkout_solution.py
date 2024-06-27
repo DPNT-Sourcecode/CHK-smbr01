@@ -56,7 +56,7 @@ price_df = price_df.assign(rule_ranking=[2 if " get one " in x else 0 for x in p
 price_df.sort_values('rule_ranking', ascending=False, inplace=True)
 
 # TODO compute this automatically in future
-SKUS_IN_3_FOR_45_OFFER = ['Z,S,Y,T,X']
+SKUS_IN_3_FOR_45_OFFER = ['Z','S','Y','T','X']
 # | Z    | 21 
 # | S    | 20  
 # | Y    | 20 
@@ -180,12 +180,14 @@ def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
     
     total_discount_for_rule = 0
 
+    import pdb;pdb.set_trace()
     if number_of_discounts_triggered:
         # remove the highest priced item in the range
         # TODO test when sku==index
         for sku in SKUS_IN_3_FOR_45_OFFER:
             if basket_contents_lookup[sku]:
-                
+
+                import pdb;pdb.set_trace()
                 # discount here
                 # total_discount_for_rule += _get_sku_price(sku)
                 # remove item
@@ -223,13 +225,12 @@ def _calculate_total_price(products_in_basket_sku_list):
             elif discount_rule['type'] == "bogof":
                 evaluated_discount_details = _bogof_evaluator(
                     basket_contents_lookup, index, row, discount_rule)
-            elif discount_rule['type'] == "3for45":
-                evaluated_discount_details = _3_for_45_evaluator(
-                    basket_contents_lookup, index, row, discount_rule)
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
             basket_contents_lookup[discount_rule['discount_target_sku']
                                    ] = evaluated_discount_details['remaining_items_for_future_discounts']
+
+    
 
     basket_total_post_discounts = basket_sub_total - discount_accumulated
 
@@ -251,6 +252,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
