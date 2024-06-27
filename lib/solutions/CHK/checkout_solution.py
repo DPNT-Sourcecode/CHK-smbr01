@@ -160,6 +160,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
 def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
+    import pdb;pdb.set_trace()
     # calculate total discount
     number_of_discounts_triggered, remainder = divmod(
         number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
@@ -241,6 +242,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
