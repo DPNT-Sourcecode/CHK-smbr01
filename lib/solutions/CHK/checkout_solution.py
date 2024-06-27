@@ -160,12 +160,13 @@ def _calculate_total_price(products_in_basket_sku_list: list) -> int:
         discount_rules_info = _discount_parser(
             row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
-            import pdb;pdb.set_trace()
+            # import pdb;pdb.set_trace()
             # TODO define a proper interface for these
-            if discount_rule['type'] == 'multibuy':
+            discount_target_item_held = basket_contents_lookup[discount_rule['discount_target_sku']]
+            if discount_target_item_held and discount_rule['type'] == 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(
                     basket_contents_lookup, index, discount_rule)
-            elif discount_rule['type'] == "bogof":
+            elif discount_target_item_held and discount_rule['type'] == "bogof":
                 evaluated_discount_details = _bogof_evaluator(
                     basket_contents_lookup, index, discount_rule)
             else:
@@ -198,5 +199,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
