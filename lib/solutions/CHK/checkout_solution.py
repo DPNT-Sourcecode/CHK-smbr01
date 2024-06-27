@@ -104,10 +104,7 @@ basket_discount_tracker = {
 price_df=pd.read_csv('lib/solutions/CHK/item_price.csv', sep="|")
 price_df.columns = price_df.columns.str.strip()
 price_df.set_index('Item', inplace=True)
-import pdb;pdb.set_trace()
-price_df.rename(columns={0: "price", 1: "discount_rule"})
-price_df.rename(columns={0: "price", 1: "discount_rule"}, inplace=True)
-
+price_df.columns = ['price', 'discount_rule']
 
 
 def _is_basket_valid(products_in_basket_sku_list):
@@ -251,6 +248,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
