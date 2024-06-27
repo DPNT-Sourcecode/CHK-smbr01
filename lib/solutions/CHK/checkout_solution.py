@@ -188,7 +188,7 @@ def _calculate_total_price(products_in_basket_sku_list: list) -> int:
 
     basket_total_post_discounts = basket_sub_total - discount_accumulated
 
-    return basket_total_post_discounts
+    return int(basket_total_post_discounts)
 
 
 def checkout(skus: str) -> int:
@@ -205,6 +205,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
