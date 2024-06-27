@@ -148,10 +148,10 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             discount_details = discount_rule.split(" get one ")
             number_of_items_required_to_trigger = int(discount_details[0][0])
             discounted_price = int(discount_details[1])
-            potential_full_price = number_of_items_required_to_trigger * original_price_per_unit
-            discount_per_trigger = potential_full_price - discounted_price
             discount_type = 'bogof'
-            discount_target_sku = discount_details[0][1]
+            discount_target_sku = discount_details[1][0]
+            potential_full_price = number_of_items_required_to_trigger * 
+            discount_per_trigger = potential_full_price - discounted_price
             parsed_rules_info.append({
                 "type": discount_type,
                 "discount_per_trigger": discount_per_trigger,
@@ -239,3 +239,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
