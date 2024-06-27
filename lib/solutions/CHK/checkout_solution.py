@@ -72,7 +72,7 @@ basket_discount_tracker = {
 # sorted by BOGOF first (NOTE a python version should be used which retains dictionary order)
 ITEM_PRICE_DISCOUNT_LOOKUP = {
     "E": [40, "2E get one B free"],
-    # "F": [10, "2F get one F free"],
+    "F": [10, "2F get one F free"],
     # "N": [40, "3N get one M free"],
     # "R": [50, "3R get one Q free"],
     # "U": [40, "3U get one U free"],
@@ -176,8 +176,7 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
     number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
 
     # If the free product isn't in the basket, we won't award the discount
-    if number_of_discounts_triggered and not remainder:
-        import pdb;pdb.set_trace()
+    if number_of_discounts_triggered > basket_contents_lookup[discount_info['discount_target_sku']]:
         number_of_discounts_triggered -= 1
 
 
@@ -235,6 +234,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
