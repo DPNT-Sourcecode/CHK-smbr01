@@ -88,7 +88,7 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
     "L": [90, ""],
     "M": [15, ""],
     "O": [10, ""],
-    "P": [50, "5P for 200"], 
+    "P": [50, "5P for 200"],
     "Q": [30, "3Q for 80"],
     "S": [30, ""],
     "T": [20, ""],
@@ -211,6 +211,7 @@ def _calculate_total_price(products_in_basket_sku_list):
     for index, row in price_df.iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
+            # TODO think these  are mostly the same
             if discount_rule['type'] is 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
             else:
@@ -243,5 +244,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
