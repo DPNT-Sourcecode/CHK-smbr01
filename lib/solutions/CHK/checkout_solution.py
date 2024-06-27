@@ -105,6 +105,7 @@ price_df.columns = price_df.columns.str.strip()
 price_df = price_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
 price_df.set_index('Item', inplace=True)
 price_df.columns = ['price', 'discount_rule']
+import pdb;pdb.set_trace()
 
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
@@ -219,7 +220,7 @@ def _calculate_total_price(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
         basket_contents_lookup[sku] += 1
 
-    basket_sub_total = int(sum([price_df[sku:sku]['price']
+    basket_sub_total = int(sum([_get_sku_price(sku)
                            for sku in products_in_basket_sku_list]))
 
     discount_accumulated = 0
@@ -263,5 +264,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
