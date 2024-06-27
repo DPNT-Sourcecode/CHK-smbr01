@@ -112,6 +112,9 @@ def _is_basket_valid(products_in_basket_sku_list):
             return False
     return True
 
+def _get_sku_price(sku):
+    return price_df[sku:sku]['price'].iloc[0]
+
 def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
 
     discount_rules = discount_rule.split(",")
@@ -154,8 +157,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             number_of_items_required_to_trigger = int(discount_details[0][0])
             discount_type = 'bogof'
             discount_target_sku = discount_details[1][0]
-            import pdb;pdb.set_trace()
-            discount_per_trigger = int(price_df[discount_target_sku:discount_target_sku]['price'])
+            discount_per_trigger = _get_sku_price(discount_target_sku)
             parsed_rules_info.append({
                 "type": discount_type,
                 "discount_per_trigger": discount_per_trigger,
@@ -261,4 +263,5 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
