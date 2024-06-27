@@ -103,17 +103,15 @@ basket_discount_tracker = {
 # price_df = pd.DataFrame.from_csv("lib/solutions/CHK/item_price.csv", orient='index')
 price_df=pd.read_csv('lib/solutions/CHK/item_price.csv', sep="|")
 price_df.columns = price_df.columns.str.strip()
+price_df = price_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
 price_df.set_index('Item', inplace=True)
 price_df.columns = ['price', 'discount_rule']
 
-
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
-        import  pdb;pdb.set_trace()
-        if sku not in price_df:
+        if sku not in price_df.index:
             return False
     return True
-
 
 def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
 
@@ -249,3 +247,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
