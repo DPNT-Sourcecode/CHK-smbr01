@@ -72,37 +72,38 @@ basket_discount_tracker = {
 # sorted by BOGOF first (NOTE a python version should be used which retains dictionary order)
 ITEM_PRICE_DISCOUNT_LOOKUP = {
     "E": [40, "2E get one B free"],
-    # "F": [10, "2F get one F free"],
-    # "N": [40, "3N get one M free"],
-    # "R": [50, "3R get one Q free"],
-    # "U": [40, "3U get one U free"],
-    # "A": [50, "3A for 130, 5A for 200"],
+    "F": [10, "2F get one F free"],
+    "N": [40, "3N get one M free"],
+    "R": [50, "3R get one Q free"],
+    "U": [40, "3U get one U free"],
+    "A": [50, "3A for 130, 5A for 200"],
     "B": [30, "2B for 45"],
-    # "C": [20, ""],
-    # "D": [15, ""],
-    # "G": [20, ""],
-    # "H": [10, "5H for 45, 10H for 80"],
-    # "I": [35, ""],
-    # "J": [60, ""],
-    # "K": [80, "2K for 150"],
-    # "L": [90, ""],
-    # "M": [15, ""],
-    # "O": [10, ""],
-    # "P": [50, "5P for 200"],
-    # "Q": [30, "3Q for 80"],
-    # "S": [30, ""],
-    # "T": [20, ""],
-    # "V": [50, "2V for 90, 3V for 130"],
-    # "W": [20, ""],
-    # "X": [90, ""],
-    # "Y": [10, ""],
-    # "Z": [50, ""],
+    "C": [20, ""],
+    "D": [15, ""],
+    "G": [20, ""],
+    "H": [10, "5H for 45, 10H for 80"],
+    "I": [35, ""],
+    "J": [60, ""],
+    "K": [80, "2K for 150"],
+    "L": [90, ""],
+    "M": [15, ""],
+    "O": [10, ""],
+    "P": [50, "5P for 200"],
+    "Q": [30, "3Q for 80"],
+    "S": [30, ""],
+    "T": [20, ""],
+    "V": [50, "2V for 90, 3V for 130"],
+    "W": [20, ""],
+    "X": [90, ""],
+    "Y": [10, ""],
+    "Z": [50, ""],
 }
 
 # set up dataframe for item price tabular data
 price_df = pd.DataFrame.from_dict(ITEM_PRICE_DISCOUNT_LOOKUP, orient='index')
 price_df.rename(columns={0: "price", 1: "discount_rule"})
 price_df.rename(columns={0: "price", 1: "discount_rule"}, inplace=True)
+
 
 def _is_basket_valid(products_in_basket_sku_list):
     for sku in products_in_basket_sku_list:
@@ -125,7 +126,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             # it's a multibuy discount
             discount_details = discount_rule.split(" for ")
             # TODO increase robustness & clarity when splitting these strings
-            number_of_items_required_to_trigger = int(discount_details[0][0])  
+            number_of_items_required_to_trigger = int(discount_details[0][0])
             discounted_price = int(discount_details[1])
             potential_full_price = number_of_items_required_to_trigger * original_price_per_unit
             discount_per_trigger = potential_full_price - discounted_price
@@ -160,32 +161,38 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
-    number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
+    number_of_discounts_triggered, remainder = divmod(
+        number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
     # add it to the target row
-    total_discount_for_rule = discount_info['discount_per_trigger'] * number_of_discounts_triggered
+    total_discount_for_rule = discount_info['discount_per_trigger'] * \
+        number_of_discounts_triggered
 
     return {
         'total_discount': total_discount_for_rule,
         'remaining_items_for_future_discounts': remainder
     }
 
+
 def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
-    number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
+    number_of_discounts_triggered, remainder = divmod(
+        number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
 
     # If the free product isn't in the basket, we won't award the discount
     if discount_info['discount_target_sku'] == index and number_of_discounts_triggered and not remainder:
-        number_of_discounts_triggered  -= 1
+        number_of_discounts_triggered -= 1
 
     # tally up the discount
-    total_discount_for_rule = discount_info['discount_per_trigger'] * number_of_discounts_triggered
+    total_discount_for_rule = discount_info['discount_per_trigger'] * \
+        number_of_discounts_triggered
 
     return {
         'total_discount': total_discount_for_rule,
         'remaining_items_for_future_discounts': basket_contents_lookup[discount_info['discount_target_sku']] - number_of_discounts_triggered
     }
+
 
 def _calculate_total_price(products_in_basket_sku_list):
     basket_contents_lookup = {sku: 0 for sku in ITEM_PRICE_DISCOUNT_LOOKUP}
@@ -199,21 +206,22 @@ def _calculate_total_price(products_in_basket_sku_list):
 
     # manage discounts
     for index, row in price_df.iterrows():
-        discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
+        discount_rules_info = _discount_parser(
+            row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
             if discount_rule['type'] == 'multibuy':
-                evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
+                evaluated_discount_details = _multibuy_evaluator(
+                    basket_contents_lookup, index, row, discount_rule)
             else:
-                evaluated_discount_details = _bogof_evaluator(basket_contents_lookup, index, row, discount_rule)
+                evaluated_discount_details = _bogof_evaluator(
+                    basket_contents_lookup, index, row, discount_rule)
 
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
-            basket_contents_lookup[discount_rule['discount_target_sku']] = evaluated_discount_details['remaining_items_for_future_discounts']
+            basket_contents_lookup[discount_rule['discount_target_sku']
+                                   ] = evaluated_discount_details['remaining_items_for_future_discounts']
 
     basket_total_post_discounts = basket_sub_total - discount_accumulated
-
-    # basket_total_post_discounts = basket_sub_total - (number_of_5a_discounts * 50) - (number_of_3a_discounts * 20) - (
-    #     number_of_b_discounts * 15) - (potential_number_of_free_b_products * 30) - (number_of_f_free * 10)
 
     return basket_total_post_discounts
 
@@ -233,6 +241,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
