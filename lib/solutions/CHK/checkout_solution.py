@@ -174,7 +174,6 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     }
 
 def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
-    import pdb;pdb.set_trace()
     # check how many times triggered
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
@@ -214,8 +213,7 @@ def _calculate_total_price(products_in_basket_sku_list):
 
     # manage discounts
     # TODO invert this to loop through basket items only
-    for index, row in price_df.iterrows():
-    # for index, row in price_df[:1].iterrows():
+    for index, row in price_df[4:5].iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
         for discount_rule in discount_rules_info:
 
@@ -252,6 +250,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
