@@ -123,39 +123,47 @@ class TestChk():
     #     total_price = checkout_solution.checkout("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     #     assert total_price == expected_total_price
 
-    # def test_ee(self):
+    # def test_2e(self):
     #     expected_total_price = 80
     #     total_price = checkout_solution.checkout("EE")
     #     assert total_price == expected_total_price
 
-    # def test_hhhhhhhhhh(self):
+    # def test_10h(self):
     #     expected_total_price = 80
     #     total_price = checkout_solution.checkout("HHHHHHHHHH")
     #     assert total_price == expected_total_price
 
-    # def test_hhhhhhhhhhh(self):
+    # def test_11h(self):
     #     expected_total_price = 90
     #     total_price = checkout_solution.checkout("HHHHHHHHHHH")
     #     assert total_price == expected_total_price
 
-    # def test_sss(self):
+    # def test_3s(self):
     #     expected_total_price = 45
     #     total_price = checkout_solution.checkout("SSS")
     #     assert total_price == expected_total_price
     
-    # def test_zzz(self):
+    # def test_3z(self):
     #     expected_total_price = 45
     #     total_price = checkout_solution.checkout("ZZZ")
     #     assert total_price == expected_total_price
     
-    def test_zzzzzz(self):
-        expected_total_price = 90
-        total_price = checkout_solution.checkout("ZZZZZZ")
-        assert total_price == expected_total_price
+    # def test_6z(self):
+    #     expected_total_price = 90
+    #     total_price = checkout_solution.checkout("ZZZZZZ")
+    #     assert total_price == expected_total_price
     
-    def test_zzzzzzz(self):
+    def test_7z(self):
         expected_total_price = 111
         total_price = checkout_solution.checkout("ZZZZZZZ")
         assert total_price == expected_total_price
+    
+    def test_3_for_45_mixed_1(self):
+        expected_total_price = 21+20+20
+        # ['Z','S','Y','T','X']
+        total_price = checkout_solution.checkout("ZSYTX")
+        assert total_price == expected_total_price
+
+
 
 
