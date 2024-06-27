@@ -99,6 +99,10 @@ ITEM_PRICE_DISCOUNT_LOOKUP = {
     "Z": [50, ""],
 }
 
+ITEM_PRICE_DISCOUNT_LOOKUP = {
+
+}
+
 # set up dataframe for item price tabular data
 price_df = pd.DataFrame.from_dict(ITEM_PRICE_DISCOUNT_LOOKUP, orient='index')
 price_df.rename(columns={0: "price", 1: "discount_rule"})
@@ -246,3 +250,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
