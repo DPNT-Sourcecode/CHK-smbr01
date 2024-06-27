@@ -121,5 +121,3 @@ class TestChk():
     #     expected_total_price = 30
     #     total_price = checkout_solution.checkout("FFFF")
     #     assert total_price == expected_total_price
-
-
