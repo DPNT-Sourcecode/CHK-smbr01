@@ -174,7 +174,18 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
     }
 
 def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
-
+    import pdb;pdb.set_trace()
+    # check how many times triggered
+    number_of_this_item_in_basket = basket_contents_lookup[index]
+    # calculate total discount
+    number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
+    # add it to the target row
+    total_discount_for_rule = discount_info['discount_per_trigger'] * number_of_discounts_triggered
+    # return remaining items
+    return {
+        'total_discount': total_discount_for_rule,
+        'remaining_items_for_future_discounts': remainder
+    }
 
 def _calculate_total_price(products_in_basket_sku_list):
     basket_contents_lookup = {sku: 0 for sku in ITEM_PRICE_DISCOUNT_LOOKUP}
@@ -202,6 +213,7 @@ def _calculate_total_price(products_in_basket_sku_list):
     discount_accumulated = 0
 
     # manage discounts
+    # TODO invert this to loop through basket items only
     for index, row in price_df.iterrows():
     # for index, row in price_df[:1].iterrows():
         discount_rules_info = _discount_parser(row["price"], row["discount_rule"])
@@ -210,8 +222,8 @@ def _calculate_total_price(products_in_basket_sku_list):
             if discount_rule['type'] is 'multibuy':
                 evaluated_discount_details = _multibuy_evaluator(basket_contents_lookup, index, row, discount_rule)
             else:
-                import pdb;pdb.set_trace()
                 evaluated_discount_details = _bogof_evaluator(basket_contents_lookup, index, row, discount_rule)
+                import pdb;pdb.set_trace()
 
             # update discount total, and amount of items left for discount
             discount_accumulated += evaluated_discount_details['total_discount']
@@ -240,6 +252,7 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
 
