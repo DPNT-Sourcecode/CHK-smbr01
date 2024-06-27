@@ -174,14 +174,18 @@ def _3_for_45_evaluator(basket_contents_lookup, index, row, discount_info):
     total_number_of_eligible_items_in_basket = 0
 
     for sku in SKUS_IN_3_FOR_45_OFFER:
-        total_number_of_eligible_items_in_basket += basket_contents_lookup[sku]
+        original_price = 0
+        count = 0
+        original_price += _get_sku_price(sku)
+        discount_triggered = 
 
-    number_of_discounts_triggered, remainder = divmod(
-        total_number_of_eligible_items_in_basket, discount_info['number_of_items_required_to_trigger'])
+        # total_number_of_eligible_items_in_basket += basket_contents_lookup[sku]
 
-    for i
+    # number_of_discounts_triggered, remainder = divmod(
+        # total_number_of_eligible_items_in_basket, discount_info['number_of_items_required_to_trigger'])
 
-    import pdb;pdb.set_trace()
+    # for i
+
 
     # number_of_this_item_in_basket = basket_contents_lookup[index]
     # number_of_discounts_triggered, remainder = divmod(
@@ -269,12 +273,3 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
-
-
-
-
-
-
-
-
-
