@@ -181,11 +181,10 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
 
     # tally up the discount
     total_discount_for_rule = discount_info['discount_per_trigger'] * number_of_discounts_triggered
-    import pdb;pdb.set_trace()
 
     return {
         'total_discount': total_discount_for_rule,
-        'remaining_items_for_future_discounts': remainder if number_of_discounts_triggered else basket_contents_lookup[discount_info['discount_target_sku']]
+        'remaining_items_for_future_discounts': basket_contents_lookup[discount_info['discount_target_sku']] - number_of_discounts_triggered
     }
 
 def _calculate_total_price(products_in_basket_sku_list):
@@ -234,5 +233,6 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
 
 
