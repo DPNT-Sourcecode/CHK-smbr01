@@ -72,31 +72,31 @@ basket_discount_tracker = {
 # sorted by BOGOF first (NOTE a python version should be used which retains dictionary order)
 ITEM_PRICE_DISCOUNT_LOOKUP = {
     "E": [40, "2E get one B free"],
-    # "F": [10, "2F get one F free"],
-    # "N": [40, "3N get one M free"],
-    # "R": [50, "3R get one Q free"],
-    # "U": [40, "3U get one U free"],
-    # "A": [50, "3A for 130, 5A for 200"],
+    "F": [10, "2F get one F free"],
+    "N": [40, "3N get one M free"],
+    "R": [50, "3R get one Q free"],
+    "U": [40, "3U get one U free"],
+    "A": [50, "3A for 130, 5A for 200"],
     "B": [30, "2B for 45"],
-    # "C": [20, ""],
-    # "D": [15, ""],
-    # "G": [20, ""],
-    # "H": [10, "5H for 45, 10H for 80"],
-    # "I": [35, ""],
-    # "J": [60, ""],
-    # "K": [80, "2K for 150"],
-    # "L": [90, ""],
-    # "M": [15, ""],
-    # "O": [10, ""],
-    # "P": [50, "5P for 200"],
-    # "Q": [30, "3Q for 80"],
-    # "S": [30, ""],
-    # "T": [20, ""],
-    # "V": [50, "2V for 90, 3V for 130"],
-    # "W": [20, ""],
-    # "X": [90, ""],
-    # "Y": [10, ""],
-    # "Z": [50, ""],
+    "C": [20, ""],
+    "D": [15, ""],
+    "G": [20, ""],
+    "H": [10, "5H for 45, 10H for 80"],
+    "I": [35, ""],
+    "J": [60, ""],
+    "K": [80, "2K for 150"],
+    "L": [90, ""],
+    "M": [15, ""],
+    "O": [10, ""],
+    "P": [50, "5P for 200"],
+    "Q": [30, "3Q for 80"],
+    "S": [30, ""],
+    "T": [20, ""],
+    "V": [50, "2V for 90, 3V for 130"],
+    "W": [20, ""],
+    "X": [90, ""],
+    "Y": [10, ""],
+    "Z": [50, ""],
 }
 
 # set up dataframe for item price tabular data
@@ -143,7 +143,7 @@ def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
             # e.g. "2E get one B free"
             discount_details = discount_rule.split(" get one ")
 
-            number_of_items_required_to_trigger = int(discount_details[0][0])
+            number_of_items_required_to_trigger = int(discount_details[0][0]) + 1
             discount_type = 'bogof'
             discount_target_sku = discount_details[1][0]
             discount_per_trigger = ITEM_PRICE_DISCOUNT_LOOKUP[discount_target_sku][0]
@@ -172,7 +172,6 @@ def _multibuy_evaluator(basket_contents_lookup, index, row, discount_info):
 
 def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
     # check how many times triggered
-    import pdb;pdb.set_trace()
     number_of_this_item_in_basket = basket_contents_lookup[index]
     # calculate total discount
     number_of_discounts_triggered, remainder = divmod(number_of_this_item_in_basket, discount_info['number_of_items_required_to_trigger'])
@@ -181,7 +180,7 @@ def _bogof_evaluator(basket_contents_lookup, index, row, discount_info):
     # return remaining items
     return {
         'total_discount': total_discount_for_rule,
-        'remaining_items_for_future_discounts': remainder
+        'remaining_items_for_future_discounts': remainder if number_of_discounts_triggered else basket_contents_lookup[discount_info['discount_target_sku']]
     }
 
 def _calculate_total_price(products_in_basket_sku_list):
@@ -230,3 +229,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
