@@ -3,7 +3,7 @@
 import pandas as pd
 
 # set up dataframe for item price tabular data
-# TODO save this dataframe to disk for efficiency in future;
+# TODO save this dataframe to disk (or database) for efficiency in future;
 # it doesn't change very often would save re-building at runtime
 price_df = pd.read_csv('lib/solutions/CHK/item_price.csv', sep="|")
 price_df.columns = price_df.columns.str.strip()
@@ -12,8 +12,8 @@ price_df.set_index('Item', inplace=True)
 price_df.columns = ['price', 'discount_rule']
 price_df['rule_ranking'] = 0
 
-# top-ranking rule == 2
-price_df = price_df.assign(rule_ranking=[2 if " get one " in x else 0 for x in price_df['discount_rule']])
+# top-ranking rule == 1
+price_df = price_df.assign(rule_ranking=[1 if " get one " in x else 0 for x in price_df['discount_rule']])
 # Sort the discount rules by their ranking
 price_df.sort_values('rule_ranking', ascending=False, inplace=True)
 
@@ -28,12 +28,11 @@ def _is_basket_valid(products_in_basket_sku_list: list) -> bool:
     return True
 
 
-def _get_sku_price(sku):
+def _get_sku_price(sku: str) -> int:
     return price_df[sku:sku]['price'].iloc[0]
 
 
 def _discount_parser(original_price_per_unit: int, discount_rule: str) -> dict:
-
     discount_rules = discount_rule.split(",")
     if len(discount_rules) == 2:
         # clear up any leading whitespace
@@ -128,6 +127,7 @@ def _3_for_45_evaluator(basket_contents_lookup: dict) -> int:
     original_price = 0
     count = 0
     temp_basket_contents_lookup = basket_contents_lookup
+    # TODO efficiency could be increased here
     for _, sku in enumerate(SKUS_IN_3_FOR_45_OFFER):
         for _ in range(basket_contents_lookup[sku]):
             original_price += _get_sku_price(sku)
@@ -195,3 +195,4 @@ def checkout(skus: str) -> int:
         return _calculate_total_price(products_in_basket_sku_list)
     else:
         return -1
+
